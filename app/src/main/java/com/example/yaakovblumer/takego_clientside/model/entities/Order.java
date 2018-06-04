@@ -1,11 +1,13 @@
 package com.example.yaakovblumer.takego_clientside.model.entities;
 
 
+import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
+import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums.orderMode;
 
 public class Order {
 
     protected String customerNum;
-    protected orderMode modeOfOrder;
+    protected ConstantsAndEnums.orderMode modeOfOrder;
     protected String carNumber;
     protected String rentStartDate;
     protected String rentEndDate;

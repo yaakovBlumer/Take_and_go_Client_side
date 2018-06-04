@@ -6,6 +6,12 @@ import java.text.SimpleDateFormat;
 
 import android.content.ContentValues;
 
+import com.example.yaakovblumer.takego_clientside.model.entities.Branch;
+import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.entities.CarModel;
+import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
+import com.example.yaakovblumer.takego_clientside.model.entities.Order;
+
 public class ConstantsAndEnums {
 
     public class Log {
