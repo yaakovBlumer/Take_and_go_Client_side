@@ -26,6 +26,17 @@ public interface DataSource {
     Order isExistsOrder(String orderNum);
 
 
+    void updateCarMileage(int mileage);
+    ArrayList<Car> allCarAvailable();
+    ArrayList<Car> allCarAvailableInBranch(String id);
+    ArrayList<Car> allCarAvailableInRadius(int radius);
+    ArrayList<Branch> allBranchesExistsModel(String model);
+    ArrayList<Order> allOrdersOpen();
+    void closeOrder(int mileage);
+    int isClosedOrderInLast10Seconds();
+
+
+
     //allList:
     ArrayList<Customer> allCustomers();
     ArrayList<Car> allCars();
