@@ -111,6 +111,46 @@ public class ListsDataSource implements DataSource {
         return null;    }
 
     @Override
+    public void updateCarMileage(int mileage) {
+
+    }
+
+    @Override
+    public ArrayList<Car> allCarAvailable() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Car> allCarAvailableInBranch(String id) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Car> allCarAvailableInRadius(int radius) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Branch> allBranchesExistsModel(String model) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Order> allOrdersOpen() {
+        return null;
+    }
+
+    @Override
+    public void closeOrder(int mileage) {
+
+    }
+
+    @Override
+    public int isClosedOrderInLast10Seconds() {
+        return 0;
+    }
+
+    @Override
     public ArrayList<Customer> allCustomers() {
         return this.customers;
     }
