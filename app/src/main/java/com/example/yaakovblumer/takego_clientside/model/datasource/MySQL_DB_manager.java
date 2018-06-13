@@ -174,13 +174,33 @@ public class MySQL_DB_manager implements DataSource
             printLog("addOrder Exception:\n" + e);
             return -1;
         }
+        }
+
+        //////////////////////////////////////////////////////
+
+
+        @Override
+        public Customer isExistsCustomer(String id) {
+
+            try
+            {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisCustomerExists.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CustomerConst.ID, id);
+            String result =PHP_Tools.POST(url, contentValues);
+                JSONObject jsonObject=new JSONObject(result);
+                ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+                Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+                //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+            return customer;
+            }
+            catch (Exception e)
+            {
+                printLog("addOrder Exception:\n" + e);
+
+            }
+        return null;
     }
-
-    //////////////////////////////////////////////////////
-
-
-    @Override
-    public Customer isExistsCustomer(String id) { return null; }
 
     @Override
     public Car isExistsCar(String carNumber) {
@@ -241,6 +261,9 @@ public class MySQL_DB_manager implements DataSource
     public int isClosedOrderInLast10Seconds() {
         return 0;
     }
+
+
+
 
 
     @Override

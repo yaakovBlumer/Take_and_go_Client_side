@@ -45,6 +45,7 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onClickBtn"
             android:text="log in"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="318dp" />
