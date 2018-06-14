@@ -26,7 +26,7 @@ public interface DataSource {
     Order isExistsOrder(String orderNum);
 
 
-    void updateCarMileage(int mileage);
+    void updateCarMileage(String licenseNumber, int mileage);
     ArrayList<Car> allCarAvailable();
     ArrayList<Car> allCarAvailableInBranch(String id);
     ArrayList<Car> allCarAvailableInRadius(int radius);

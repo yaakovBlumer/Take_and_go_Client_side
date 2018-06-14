@@ -188,10 +188,10 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.CustomerConst.ID, id);
             String result =PHP_Tools.POST(url, contentValues);
-                JSONObject jsonObject=new JSONObject(result);
-                ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
-                Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
-                //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+                //JSONObject jsonObject=new JSONObject(result);
+                //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+                //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+            Customer customer=ConstantsAndEnums.ContentValuesToCustomer(PHP_Tools.JsonToContentValues(new JSONObject(result)));
             return customer;
             }
             catch (Exception e)
@@ -222,18 +222,90 @@ public class MySQL_DB_manager implements DataSource
         return null;
     }
 
-    @Override
-    public void updateCarMileage(int mileage) {
 
+
+
+    @Override
+    public void updateCarMileage(String licenseNumber, int mileage) {
+        try
+        {
+        String url = WEB_URL + "/update_car.php";
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, licenseNumber);
+        contentValues.put(ConstantsAndEnums.CarConst.MILEAGE, mileage);
+        String result =PHP_Tools.POST(url, contentValues);
+
+            String temp="UPDATED OK";
+            long id=-1;
+            if(result.equals(temp))
+                id=1;
+
+            if (id > 0)
+                SetUpdate();
+            printLog("Updated car:\n" + result);
+
+        }
+        catch (Exception e)
+        {
+            printLog("Update Mileage Exception:\n" + e);
+
+        }
     }
 
     @Override
     public ArrayList<Car> allCarAvailable() {
+        ArrayList<Car> cars = new ArrayList<>();
+
+        try {
+
+            String str = PHP_Tools.GET(WEB_URL + "/getCarsAvailable.php");
+            JSONArray array = new JSONObject(str).getJSONArray("Cars");
+
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                ContentValues contentValues = PHP_Tools.JsonToContentValues(jsonObject);
+                Car car = ConstantsAndEnums.ContentValuesToCar(contentValues);
+
+                cars.add(car);
+            }
+            return cars;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public ArrayList<Car> allCarAvailableInBranch(String id) {
+        try {
+            ArrayList<Car> cars = new ArrayList<>();
+
+            String url = WEB_URL + "/getCarAvailableInBranch.php";
+
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarConst.HOME_BRANCH, id);
+
+            String result = PHP_Tools.POST(url, contentValues);
+
+            JSONArray array = new JSONObject(result).getJSONArray("Cars");
+
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+                Car car = ConstantsAndEnums.ContentValuesToCar(contentValues2);
+
+                cars.add(car);
+            }
+            return cars;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -244,17 +316,70 @@ public class MySQL_DB_manager implements DataSource
 
     @Override
     public ArrayList<Branch> allBranchesExistsModel(String model) {
+        ArrayList<Branch> branches = new ArrayList<>();
+
+        try
+        {
+
+            String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetBranches.php");
+            JSONArray array = new JSONObject(str).getJSONArray("Branches");
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                ContentValues contentValues = PHP_Tools.JsonToContentValues(jsonObject);
+                Branch branch= ConstantsAndEnums.ContentValuesToBranch(contentValues);
+
+                branches.add(branch);
+            }
+            return branches;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
+
     @Override
     public ArrayList<Order> allOrdersOpen() {
+        ArrayList<Order> orders = new ArrayList<>();
+
+        try
+        {
+            String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetOrders.php");
+            JSONArray array = new JSONObject(str).getJSONArray("Orders");
+
+            for (int i = 0; i < array.length(); i++)
+            {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                ContentValues contentValues = PHP_Tools.JsonToContentValues(jsonObject);
+                Order order=ConstantsAndEnums.ContentValuesToOrder(contentValues);
+
+                orders.add(order);
+            }
+            return orders;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public void closeOrder(int mileage) {
+        try
+        {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8Fadd_order.php";
 
+            //String result =  PHP_Tools.POST(url, ConstantsAndEnums.OrderToContentValues(order));
+
+        }
+        catch (Exception e)
+        {
+            printLog("addOrder Exception:\n" + e);
+        }
     }
 
     @Override
