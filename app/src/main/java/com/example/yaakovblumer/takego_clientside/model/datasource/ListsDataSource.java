@@ -111,7 +111,7 @@ public class ListsDataSource implements DataSource {
         return null;    }
 
     @Override
-    public void updateCarMileage(int mileage) {
+    public void updateCarMileage(String licenseNumber, int mileage) {
 
     }
 
