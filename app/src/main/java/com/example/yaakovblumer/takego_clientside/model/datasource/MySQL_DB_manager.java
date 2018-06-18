@@ -254,6 +254,7 @@ public class MySQL_DB_manager implements DataSource
 
     @Override
     public ArrayList<Car> allCarAvailable() {
+
         ArrayList<Car> cars = new ArrayList<>();
 
         try {
@@ -314,29 +315,35 @@ public class MySQL_DB_manager implements DataSource
         return null;
     }
 
+
     @Override
     public ArrayList<Branch> allBranchesExistsModel(String model) {
         ArrayList<Branch> branches = new ArrayList<>();
 
         try
         {
+            String url = WEB_URL + "/AllBranchExistsModel.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarModelConst.MODEL_CODE, model);
 
-            String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetBranches.php");
-            JSONArray array = new JSONObject(str).getJSONArray("Branches");
+            String result =  PHP_Tools.POST(url, contentValues);
+            JSONArray array = new JSONObject(result).getJSONArray("Branches");
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jsonObject = array.getJSONObject(i);
 
-                ContentValues contentValues = PHP_Tools.JsonToContentValues(jsonObject);
-                Branch branch= ConstantsAndEnums.ContentValuesToBranch(contentValues);
+                ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+                Branch branch= ConstantsAndEnums.ContentValuesToBranch(contentValues2);
 
                 branches.add(branch);
             }
             return branches;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        catch (Exception e)
+        {
+            printLog("Exception:\n" + e);
+        }
+
         return null;
     }
 
@@ -368,17 +375,31 @@ public class MySQL_DB_manager implements DataSource
     }
 
     @Override
-    public void closeOrder(int mileage) {
+    public void closeOrder(String orderNum, int mileage) {
+
         try
         {
-            String url = WEB_URL + "/%E2%80%8F%E2%80%8Fadd_order.php";
+            String url = WEB_URL + "/close_order.php";
 
-            //String result =  PHP_Tools.POST(url, ConstantsAndEnums.OrderToContentValues(order));
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.OrderConst.ORDER_NUM, orderNum);
+            contentValues.put(ConstantsAndEnums.CarConst.MILEAGE, mileage);
+
+            String result =  PHP_Tools.POST(url, contentValues);
+
+            String temp="UPDATED OK";
+            long id=-1;
+            if(result.equals(temp))
+                id=1;
+
+            if (id > 0)
+                SetUpdate();
+            printLog("closed order number:\n" + result);
 
         }
         catch (Exception e)
         {
-            printLog("addOrder Exception:\n" + e);
+            printLog("update order Exception:\n" + e);
         }
     }
 
