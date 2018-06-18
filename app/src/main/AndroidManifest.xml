@@ -18,7 +18,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".controller.LookingForBusyCarService" ></service>
+        <service android:name=".controller.LookingForBusyCarService"
+            android:enabled="true"
+            android:exported="true">
+            ></service>
 
         <receiver
             android:name=".controller.ResponseReceiver"
