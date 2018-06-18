@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class LogIn extends AppCompatActivity {
 
-    EditText editText;
+    EditText editText, editText3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class LogIn extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
 
         editText = ((EditText) findViewById( R.id.editText));
+        editText3 = ((EditText) findViewById( R.id.editText3));
 
     }
 
@@ -38,12 +39,10 @@ public class LogIn extends AppCompatActivity {
            @Override
             protected Void doInBackground(Void... params) {
 
-                System.out.println(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCustomer(editText.getText().toString()).ToString());
-
-
+               //System.out.println(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCustomer(editText.getText().toString()).ToString());
+               FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranchesExistsModel(editText.getText().toString());
 
                 return null;
-
             }
 
             @Override
