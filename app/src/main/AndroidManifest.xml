@@ -14,20 +14,25 @@
         <activity android:name=".controller.LogIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name=".controller.LookingForBusyCarService"
+        <service
+            android:name=".controller.LookingForBusyCarService"
             android:enabled="true"
             android:exported="true">
-            ></service>
+            >
+        </service>
 
         <receiver
             android:name=".controller.ResponseReceiver"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true" />
+
+        <activity android:name=".controller.Fill_Details" />
+        <activity android:name=".controller.Register"></activity>
     </application>
 
 </manifest>

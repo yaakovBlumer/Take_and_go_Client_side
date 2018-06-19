@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.LogIn">
-
+    tools:context=".controller.Register">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="29dp"
-            android:text="אנא הכנס שם משתמש וסיסמא"
+            android:text="אנא בחר שם משתמש וסיסמא"
             tools:layout_editor_absoluteX="79dp"
             tools:layout_editor_absoluteY="114dp" />
 
@@ -25,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="שם משתמש"
+            android:hint="הכנס כאן את שם המשתמש"
             android:inputType="textPersonName"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="161dp" />
@@ -35,26 +34,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="סיסמא"
+            android:hint="בחר כאן סיסמא"
             android:inputType="textPassword"
             android:textAlignment="textEnd"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="232dp" />
 
-        <Button
-            android:id="@+id/button"
+        <EditText
+            android:id="@+id/editText4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickBtn"
-            android:text="log in"
-            tools:layout_editor_absoluteX="148dp"
-            tools:layout_editor_absoluteY="318dp" />
+            android:ems="10"
+            android:hint="הזן את הסיסמא שנית לאימות"
+            android:inputType="textPassword"
+            android:textAlignment="textEnd"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="232dp" />
+
 
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="REGISTER" />
+            android:text="שמור" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
