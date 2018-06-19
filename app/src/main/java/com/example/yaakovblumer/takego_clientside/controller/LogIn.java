@@ -1,5 +1,7 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ public class LogIn extends AppCompatActivity {
 
     EditText editText, editText3;
 
+    private ResponseReceiver receiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,19 @@ public class LogIn extends AppCompatActivity {
 
         editText = ((EditText) findViewById( R.id.editText));
         editText3 = ((EditText) findViewById( R.id.editText3));
+
+
+
+
+        ///////////////////////
+        startService(new Intent(getBaseContext(), LookingForBusyCarService.class));
+
+        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new ResponseReceiver();
+        registerReceiver(receiver, filter);
+
+        ///////////////////////
 
     }
 
