@@ -8,15 +8,17 @@ public class Customer
     protected String phoneNum;
     protected String email;
     protected String creditCardNum;
+    protected String password ;
 
 
-    public Customer(String id, String firstName, String lastName, String phoneNumber, String email, String creditCardNum) {
+    public Customer(String id, String firstName, String lastName, String phoneNumber, String email, String creditCardNum, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNumber;
         this.email = email;
         this.creditCardNum = creditCardNum;
+        this.password= password;
     }
 
     public Customer() {
@@ -69,6 +71,13 @@ public class Customer
         this.creditCardNum = creditCardNum;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String ToString()
     {

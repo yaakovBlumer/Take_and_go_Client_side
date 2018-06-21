@@ -16,22 +16,23 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="29dp"
-            android:text="אנא הכנס שם משתמש וסיסמא"
+            android:text="אנא הכנס תעודת זהות וסיסמא"
             tools:layout_editor_absoluteX="79dp"
             tools:layout_editor_absoluteY="114dp" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/Id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="שם משתמש"
-            android:inputType="textPersonName"
+            android:hint="תעודת זהות"
+            android:inputType="number"
+            android:maxLength="9"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="161dp" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -45,7 +46,7 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickBtn"
+            android:onClick="loginOnClickBtn"
             android:text="log in"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="318dp" />
@@ -54,6 +55,7 @@
             android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="registerOnClickBtn"
             android:text="REGISTER" />
     </LinearLayout>
 
