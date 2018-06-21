@@ -1,5 +1,6 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,6 +35,9 @@ public class LogIn extends AppCompatActivity {
     private static final int ID_LENGTH = 9;
     private static String Id="";
     private static String Password="";
+    Intent intent_name = new Intent();
+   // private static final View view=null;
+
 
 
 
@@ -50,6 +54,8 @@ public class LogIn extends AppCompatActivity {
         password = ((EditText) findViewById( R.id.Password));
         customer= new Customer();
         mySharedPreferences=new MYSharedPreferences();
+        intent_name.setClass(getApplicationContext(),Register.class);
+
 
 
         ///////////////////////
@@ -90,9 +96,7 @@ else if(mySharedPreferences.isStringExistsInSharedPreferences(this,ourId,"ID")==
 
 //searching in sql_db in web.
 else {
-
-
-    new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, Void>() {
 
 
         @Override
@@ -106,34 +110,36 @@ else {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-                super.onPostExecute(aVoid);
-                //everything is good.
-                if (customer!=null && customer.getId().equals(ourId) && customer.getPassword().equals(ourPass)) {
-                    mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
-                    //
-                    Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
-                    tmpFlag=true;
-                    ifFlag=true;
+            super.onPostExecute(aVoid);
+            //everything is good.
+            if (customer != null && customer.getId().equals(ourId) && customer.getPassword().equals(ourPass)) {
+                 mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
+                //
+                Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+            }
+
+            //good id and error with password.
+            else if (customer != null && customer.getId().equals(ourId)) {
+                mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
+                Toast.makeText(getBaseContext(), "Error with password.", Toast.LENGTH_SHORT).show();
+            }
+
+            //not exists this customer at all. go to register a new one.
+            else {
+                try {
+                   // Toast.makeText(getBaseContext(), "Go to register your details.", Toast.LENGTH_SHORT).show();
+
+                    startActivity(intent_name);
+
                 }
 
-                //good id and error with password.
-                else if(customer!=null && customer.getId().equals(ourId))
-                {
-                    mySharedPreferences.saveSharedPreferences(getBaseContext(),ourId,ourPass);
-                    Toast.makeText(getBaseContext(), "Error with password.", Toast.LENGTH_SHORT).show();
-                    tmpFlag=true;
-                }
+  catch(Exception ex)
+            {
+                Toast.makeText(LogIn.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.w(ConstantsAndEnums.Log.APP_LOG, ex.getMessage());
+            }
 
-                //not exists this customer at all. go to register a new one.
-                else
-                {
-                    Toast.makeText(getBaseContext(), "Go to register your details.", Toast.LENGTH_SHORT).show();
-                    Intent intent_name = new Intent();
-                    intent_name.setClass(getApplicationContext(),Register.class);
-                 //   startActivity(intent_name);
-                    tmpFlag=true;
-                    elseFlag=true;
-                }
+    }
 
 
 
@@ -141,14 +147,6 @@ else {
         }
 
     }.execute();
-
-/*
-   // while(!tmpFlag);
-    if(ifFlag);
-        ///////
-    if(elseFlag)
-        startActivity( new Intent( LogIn.this,Register.class ) );
-        */
 
 }
 } catch(InterruptedException e) {e.printStackTrace();}

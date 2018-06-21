@@ -1,6 +1,7 @@
 package com.example.yaakovblumer.takego_clientside.model.backend;
 
 import android.content.ContentValues;
+import android.content.Intent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
