@@ -1,8 +1,11 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +21,7 @@ import com.example.yaakovblumer.takego_clientside.R;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    about ab=new about();
+    Fragment odot, snifim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,8 @@ public class Home extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        odot=new about();
+        snifim=new Branches_sec();
 
         setSupportActionBar(toolbar);
 
@@ -81,6 +85,8 @@ public class Home extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+/*
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -105,4 +111,36 @@ public class Home extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+*/
+
+
+
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_about:
+                changeFragement(odot);
+                return true;
+            case R.id.navigation_branches:
+                changeFragement(snifim);
+                return true;
+            case R.id.navigation_cars:
+                changeFragement(notifications);
+                return true;
+            case R.id.navigation_customer:
+                changeFragement(notifications);
+                return true;
+
+        }
+        return false;
+    }
+
+
+    protected void changeFragement(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frgamentContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
 }
