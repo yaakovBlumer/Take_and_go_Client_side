@@ -12,7 +12,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.R;
+import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 import com.example.yaakovblumer.takego_clientside.model.datasource.MySQL_DB_manager;
+import com.example.yaakovblumer.takego_clientside.model.entities.Car;
 
 
 import java.sql.SQLData;
@@ -20,11 +22,17 @@ import java.sql.SQLException;
 import java.sql.SQLInput;
 import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class LookingForBusyCarService extends IntentService {
+    ArrayList<Car> carAvailable=new ArrayList<Car>();
+    ArrayList<Car> tempCarAvailable=new ArrayList<Car>();
+    ArrayList<Car> lastCarAvailable=new ArrayList<Car>();
+
+    boolean isFirstTime=true;
     static int count = 1;
     int id = 0, startId = -1;
     boolean isRun = false;
@@ -41,21 +49,50 @@ public class LookingForBusyCarService extends IntentService {
         protected void onHandleIntent(Intent intent) {
         while (isRun) {
             try {
+
+                if(isFirstTime)
+                {
+                    isFirstTime=false;
+                    carAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
+                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
+                    //String currentDateandTime = sdf.format(new Date());
+                    broadcastIntent.putExtra(PARAM_OUT_MSG, "Cars available: " + carAvailable.toString());
+                    sendBroadcast(broadcastIntent);
+
+                    Log.d("LookingForBusyCarService", "Start Sending message..");
+                    // Toast.makeText(this, "Service Sending", Toast.LENGTH_LONG).show();
+
+                }
+
+                else {
+
+                    tempCarAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+
+                    for (Car item : tempCarAvailable) {
+                        if (!carAvailable.contains(item))
+                            lastCarAvailable.add(item);
+                    }
+
+                    carAvailable=tempCarAvailable;
+                    if(!lastCarAvailable.isEmpty())
+                    {
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
+                        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                        //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
+                        //String currentDateandTime = sdf.format(new Date());
+                        broadcastIntent.putExtra(PARAM_OUT_MSG, "Last cars available: " + lastCarAvailable.toString());
+                        sendBroadcast(broadcastIntent);
+                        Log.d("LookingForBusyCarService", "Last cars available: " + lastCarAvailable.toString());
+                    }
+
+                }
+
                 Thread.sleep(1000*10);
-                Log.d("LookingForBusyCarService", "Start Sending message..");
-               // Toast.makeText(this, "Service Sending", Toast.LENGTH_LONG).show();
-
-
-
-
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
-                String currentDateandTime = sdf.format(new Date());
-                broadcastIntent.putExtra(PARAM_OUT_MSG, "Service Check At Time: " + currentDateandTime);
-                sendBroadcast(broadcastIntent);
             }
             catch(InterruptedException e) {e.printStackTrace();}
             catch (Exception e) { e.getMessage();}

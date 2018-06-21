@@ -35,8 +35,10 @@ public class LogIn extends AppCompatActivity {
     private static final int ID_LENGTH = 9;
     private static String Id="";
     private static String Password="";
-    Intent intent_name = new Intent();
-   // private static final View view=null;
+    Intent intent_register = new Intent();
+    Intent intent_home = new Intent();
+
+    // private static final View view=null;
 
 
 
@@ -54,7 +56,9 @@ public class LogIn extends AppCompatActivity {
         password = ((EditText) findViewById( R.id.Password));
         customer= new Customer();
         mySharedPreferences=new MYSharedPreferences();
-        intent_name.setClass(getApplicationContext(),Register.class);
+        intent_register.setClass(getApplicationContext(),Register.class);
+        intent_register.setClass(getApplicationContext(),Home.class);
+
 
 
 
@@ -114,8 +118,11 @@ else {
             //everything is good.
             if (customer != null && customer.getId().equals(ourId) && customer.getPassword().equals(ourPass)) {
                  mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
-                //
-                Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+
+                startActivity(intent_home);
+
             }
 
             //good id and error with password.
@@ -129,7 +136,7 @@ else {
                 try {
                    // Toast.makeText(getBaseContext(), "Go to register your details.", Toast.LENGTH_SHORT).show();
 
-                    startActivity(intent_name);
+                    startActivity(intent_register);
 
                 }
 

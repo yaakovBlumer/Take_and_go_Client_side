@@ -13,6 +13,7 @@ public class ResponseReceiver extends BroadcastReceiver {
         public static final String ACTION_RESP =
                 "yaakovblumer.il.example.com.intent.action.MESSAGE_PROCESSED";
 
+
         @Override
         public void onReceive(Context context, Intent intent) {
             //TextView result = (TextView) findViewById(R.id.text3);
