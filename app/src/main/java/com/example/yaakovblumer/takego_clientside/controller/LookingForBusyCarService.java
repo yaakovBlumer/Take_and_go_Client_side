@@ -15,6 +15,10 @@ import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.datasource.MySQL_DB_manager;
 
 
+import java.sql.SQLData;
+import java.sql.SQLException;
+import java.sql.SQLInput;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -40,6 +44,9 @@ public class LookingForBusyCarService extends IntentService {
                 Thread.sleep(1000*10);
                 Log.d("LookingForBusyCarService", "Start Sending message..");
                // Toast.makeText(this, "Service Sending", Toast.LENGTH_LONG).show();
+
+
+
 
 
                 Intent broadcastIntent = new Intent();

@@ -7,56 +7,78 @@
     tools:context=".controller.Register">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="29dp"
-            android:text="אנא בחר שם משתמש וסיסמא"
-            tools:layout_editor_absoluteX="79dp"
-            tools:layout_editor_absoluteY="114dp" />
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/Id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="הכנס כאן את שם המשתמש"
-            android:inputType="textPersonName"
-            tools:layout_editor_absoluteX="85dp"
-            tools:layout_editor_absoluteY="161dp" />
+            android:hint="אנא הכנס תעודת זהות"
+            android:inputType="number" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/FirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="בחר כאן סיסמא"
+            android:hint="אנא הכנס שם פרטי"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/LastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="אנא הכנס שם משפחה"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/PhoneNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="אנא הכנס מספר פלאפון"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="אנא הכנס כתובת דואר אלקטורני"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/CreditCardNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="אנא הכנס מספר כרטיס אשראי"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="אנא הכנס סיסמא לכניסה לאפליקציה"
             android:inputType="textPassword"
-            android:textAlignment="textEnd"
-            tools:layout_editor_absoluteX="85dp"
-            tools:layout_editor_absoluteY="232dp" />
-
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="הזן את הסיסמא שנית לאימות"
-            android:inputType="textPassword"
-            android:textAlignment="textEnd"
-            tools:layout_editor_absoluteX="85dp"
-            tools:layout_editor_absoluteY="232dp" />
-
+            android:maxLength="18" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnAddUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="שמור" />
+            android:onClick="btnAddUserClick"
+            android:text="שמירת פרטי לקוח וכניסה לאפליקציה" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

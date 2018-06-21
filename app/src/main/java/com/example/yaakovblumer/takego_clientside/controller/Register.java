@@ -1,73 +1,104 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
-import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
+import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
+import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 
 public class Register extends AppCompatActivity {
-    EditText editText, editText3, editText4;
 
-    private ResponseReceiver receiver;
+
+    private static final int MIN_PASSWORD_LENGTH = 8;
+    private static final int ID_LENGTH = 9;
+    MYSharedPreferences mySharedPreferences;
+    String ourId = "";
+    String ourPass = "";
+
+
+    EditText id,firstName,lastName, phoneNum, email, creditCardNum, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        try{
 
-        editText = ((EditText) findViewById( R.id.editText));
-        editText3 = ((EditText) findViewById( R.id.editText3));
-        editText4 = ((EditText) findViewById( R.id.editText4));
+            super.onCreate( savedInstanceState );
+            setContentView( R.layout.activity_register );
 
 
+            mySharedPreferences= new MYSharedPreferences();
 
+            id = ((EditText) findViewById( R.id.Id ));
+            firstName = ((EditText) findViewById( R.id.FirstName ));
+            lastName = ((EditText) findViewById( R.id.LastName ));
+            phoneNum = ((EditText) findViewById( R.id.PhoneNum ));
+            email = ((EditText) findViewById( R.id.Email ));
+            creditCardNum = ((EditText) findViewById( R.id.CreditCardNum ));
+            password = ((EditText) findViewById( R.id.Password ));
 
-        ///////////////////////
-        startService(new Intent(getBaseContext(), LookingForBusyCarService.class));
-
-        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new ResponseReceiver();
-        registerReceiver(receiver, filter);
-
-        ///////////////////////
+        }
+        catch(Exception ex){Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();};
 
     }
 
+    public void btnAddUserClick(View view) {
+        try
+        {
+            ourId = id.getText().toString();
+            ourPass = password.getText().toString();
 
-    public void onClickBtn(View view)
-    {
+            if (TextUtils.isEmpty(ourId) || ourId.length() != ID_LENGTH)
+                throw new Exception("You must have 9 characters in your id.");
 
-        new AsyncTask<Void, Void, Void>() {
+            if (TextUtils.isEmpty(ourPass) || ourPass.length() < MIN_PASSWORD_LENGTH)
+                throw new Exception("You must have 8 characters in your password at least.");
+
+            new AsyncTask<Void, Void, Long>() {
+
+                Customer customer = new Customer(
+                        id.getText().toString(),
+                        firstName.getText().toString(),
+                        lastName.getText().toString(),
+                        phoneNum.getText().toString(),
+                        email.getText().toString(),
+                        creditCardNum.getText().toString(),
+                        password.getText().toString()   );
 
 
-            @Override
-            protected Void doInBackground(Void... params) {
 
+                @Override
+                protected void onPostExecute(Long idResult) {
+                    super.onPostExecute(idResult);
+                    if (idResult > 0)
+                    {
+                        Toast.makeText(getBaseContext(), "insert id: " + id.getText().toString(), Toast.LENGTH_LONG).show();
+                        mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
+                        //
+                        Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-                return null;
-            }
+                @Override
+                protected Long doInBackground(Void... params) {
+                    return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addCustomer(customer);
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                try {
-                    super.onPostExecute(aVoid);
-
-                } catch (Exception e) {
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
 
                 }
-            }
+            }.execute();
 
-        }.execute();
 
+
+
+        }
+        catch(Exception ex){
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        };
     }
 }
