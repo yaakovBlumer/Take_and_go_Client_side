@@ -141,7 +141,7 @@ public class ListsDataSource implements DataSource {
     }
 
     @Override
-    public void closeOrder(String orderNum, int mileage) {
+    public void closeOrder(String orderNum) {
 
     }
 

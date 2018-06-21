@@ -57,7 +57,7 @@ public class LogIn extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
 
                //System.out.println(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCustomer(editText.getText().toString()).ToString());
-               FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranchesExistsModel(editText.getText().toString());
+               FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).closeOrder(editText.getText().toString());
 
                 return null;
             }

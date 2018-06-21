@@ -21,7 +21,7 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
+        setContentView(R.layout.activity_register);
 
         editText = ((EditText) findViewById( R.id.editText));
         editText3 = ((EditText) findViewById( R.id.editText3));
