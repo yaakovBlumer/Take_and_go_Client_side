@@ -57,7 +57,7 @@ public class LogIn extends AppCompatActivity {
         customer= new Customer();
         mySharedPreferences=new MYSharedPreferences();
         intent_register.setClass(getApplicationContext(),Register.class);
-        intent_register.setClass(getApplicationContext(),Home.class);
+        intent_home.setClass(getApplicationContext(),Home.class);
 
 
 
