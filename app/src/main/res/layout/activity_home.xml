@@ -22,4 +22,18 @@
         app:headerLayout="@layout/nav_header_home"
         app:menu="@menu/activity_home_drawer" />
 
+
+    <FrameLayout
+        android:id="@+id/frgamentContainer"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+
+
 </android.support.v4.widget.DrawerLayout>

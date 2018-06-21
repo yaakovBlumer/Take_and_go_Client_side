@@ -21,7 +21,7 @@ import com.example.yaakovblumer.takego_clientside.R;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Fragment odot, snifim;
+    Fragment odot, snifim, oto, kone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,8 @@ public class Home extends AppCompatActivity
 
         odot=new about();
         snifim=new Branches_sec();
+        oto=new cars();
+        kone=new customer();
 
         setSupportActionBar(toolbar);
 
@@ -83,6 +85,7 @@ public class Home extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+
     }
 
 
@@ -124,10 +127,10 @@ public class Home extends AppCompatActivity
                 changeFragement(snifim);
                 return true;
             case R.id.navigation_cars:
-                changeFragement(notifications);
+                changeFragement(oto);
                 return true;
             case R.id.navigation_customer:
-                changeFragement(notifications);
+                changeFragement(kone);
                 return true;
 
         }
