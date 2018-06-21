@@ -50,5 +50,7 @@ public class Branch
         return  "\n"+branchAddress +"\n"+capacityOfCar+"\n"+branchNum+"\n"+administratorName+"\n";
     }
 
-
+    public String getModelCode() {
+        return this.branchNum;
+    }
 }

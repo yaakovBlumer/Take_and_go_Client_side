@@ -2,13 +2,26 @@ package com.example.yaakovblumer.takego_clientside.controller;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
+import com.example.yaakovblumer.takego_clientside.model.entities.Branch;
 
 import com.example.yaakovblumer.takego_clientside.R;
+import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +36,20 @@ public class Branches_sec extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
+    static ArrayList<Branch> branchArrayList=new ArrayList<>();
+    static ArrayList<Car> carArrayList=new ArrayList<>();
+
+    static String temp=new String("");
+    ArrayAdapter<Branch> branchArrayAdapter;
+    ArrayAdapter<Car> carArrayAdapter;
+
+    Spinner spinner;
+    static ArrayList<Branch> BranchesSimpleList = null;
+    static ArrayList<String> BranchesCodeSimpleList = new ArrayList<String>();
+
+    ListView _dynamic;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,13 +86,62 @@ public class Branches_sec extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_branches_sec, container, false);
+
+
+        View view=inflater.inflate(R.layout.fragment_branches_sec, container, false);
+
+        spinner=(Spinner)view.findViewById(R.id.spinner);
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                BranchesSimpleList= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranches();
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    if(BranchesCodeSimpleList == null){
+                        BranchesCodeSimpleList = new ArrayList<>( );
+                    }
+                    super.onPostExecute(aVoid);
+                    BranchesCodeSimpleList.clear();
+                    BranchesCodeSimpleList.addAll( getALLBranchesCode(BranchesSimpleList) );
+                    branchArrayAdapter.notifyDataSetChanged();
+                    spinner.setAdapter(branchArrayAdapter);
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
+                //    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+
+                }
+
+
+            }
+        }.execute();
+
+
+        return view;
+
+
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,4 +182,64 @@ public class Branches_sec extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    public ArrayList<String> getALLBranchesCode(ArrayList<Branch> CarModelList )
+    {
+
+        ArrayList<String> temp=new ArrayList<>();
+        for (Branch item : CarModelList)
+        {
+            temp.add(item.getModelCode());
+        }
+        return temp;
+    }
+
+
+    public void onButtom3Click(View view)
+    {
+        FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailableInBranch(spinner.getSelectedItem().toString());
+
+
+        temp="";
+
+
+        new AsyncTask<Void, Void, Void>() {
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                carArrayList.clear();
+                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCars());
+                for (Car item : carArrayList) {
+                    temp+=item.ToString();
+                }
+
+                return null;
+
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    super.onPostExecute(aVoid);
+                    // textView4.setText(temp);
+                    carArrayAdapter.notifyDataSetChanged();
+                    _dynamic.setAdapter(carArrayAdapter);
+
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
+                 //   Toast.makeText(Branches_sec.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+                }
+
+            }
+
+        }.execute();
+
+
+
+    }
+
 }
