@@ -198,7 +198,6 @@ public class Branches_sec extends Fragment {
 
     public void onButtom3Click(View view)
     {
-        FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailableInBranch(spinner.getSelectedItem().toString());
 
 
         temp="";
@@ -210,7 +209,8 @@ public class Branches_sec extends Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 carArrayList.clear();
-                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCars());
+                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailableInBranch(spinner.getSelectedItem().toString()));
+
                 for (Car item : carArrayList) {
                     temp+=item.ToString();
                 }
