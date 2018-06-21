@@ -1,5 +1,6 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 
 public class Register extends AppCompatActivity {
 
-
+    Intent intent_home = new Intent();
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int ID_LENGTH = 9;
     MYSharedPreferences mySharedPreferences;
@@ -34,6 +35,7 @@ public class Register extends AppCompatActivity {
 
 
             mySharedPreferences= new MYSharedPreferences();
+            intent_home.setClass(getApplicationContext(),Home.class);
 
             id = ((EditText) findViewById( R.id.Id ));
             firstName = ((EditText) findViewById( R.id.FirstName ));
@@ -80,8 +82,11 @@ public class Register extends AppCompatActivity {
                     {
                         Toast.makeText(getBaseContext(), "insert id: " + id.getText().toString(), Toast.LENGTH_LONG).show();
                         mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
-                        //
-                        Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+
+                       // Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
+
+                        startActivity(intent_home);
+
                     }
                 }
 
