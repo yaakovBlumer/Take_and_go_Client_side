@@ -136,8 +136,8 @@ else {
                 try {
                    // Toast.makeText(getBaseContext(), "Go to register your details.", Toast.LENGTH_SHORT).show();
 
-                 //   startActivity(intent_register);
-                    startActivity(intent_home);
+                    startActivity(intent_register);
+               //     startActivity(intent_home);
 
                 }
 
