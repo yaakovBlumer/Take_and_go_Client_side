@@ -35,6 +35,7 @@ public class Register extends AppCompatActivity {
 
 
             mySharedPreferences= new MYSharedPreferences();
+            intent_home.setClass(getApplicationContext(),Home.class);
 
             id = ((EditText) findViewById( R.id.Id ));
             firstName = ((EditText) findViewById( R.id.FirstName ));
