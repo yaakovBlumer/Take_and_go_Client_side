@@ -33,7 +33,10 @@
 
         <activity android:name=".controller.Fill_Details" />
         <activity android:name=".controller.Register" />
-        <activity android:name=".controller.take_and_go" />
+        <activity
+            android:name=".Home"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
