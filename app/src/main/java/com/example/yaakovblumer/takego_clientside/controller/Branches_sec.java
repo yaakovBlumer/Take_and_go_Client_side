@@ -19,9 +19,11 @@ import com.example.yaakovblumer.takego_clientside.model.entities.Branch;
 
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.entities.Order;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,10 +200,7 @@ public class Branches_sec extends Fragment {
 
     public void onButtom3Click(View view)
     {
-
-
         temp="";
-
 
         new AsyncTask<Void, Void, Void>() {
 
@@ -214,11 +213,8 @@ public class Branches_sec extends Fragment {
                 for (Car item : carArrayList) {
                     temp+=item.ToString();
                 }
-
                 return null;
-
             }
-
 
             @Override
             protected void onPostExecute(Void aVoid) {
@@ -228,18 +224,52 @@ public class Branches_sec extends Fragment {
                     carArrayAdapter.notifyDataSetChanged();
                     _dynamic.setAdapter(carArrayAdapter);
 
-
                 } catch (Exception e) {
                     Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
                  //   Toast.makeText(Branches_sec.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
                 }
+            }
+        }.execute();
+    }
 
+
+
+    public void orderCarButton(View view){
+
+        new AsyncTask<Void, Void, Long>() {
+
+
+            Order order=new Order(
+                    "468711",
+                    ConstantsAndEnums.orderMode.OPEN,
+                    _dynamic.getSelectedItem().toString(),
+                    "22/06/93",
+                    "00/00/00",
+                    1,
+                    2,
+                    false,
+                    3,
+                    4,
+                    "45567");
+
+            @Override
+            protected void onPostExecute(Long idResult) {
+                super.onPostExecute(idResult);
+           //     if (idResult > 0)
+                  //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
             }
 
+            @Override
+            protected Long doInBackground(Void... params) {
+                return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+
+            }
         }.execute();
 
 
 
     }
+
+
 
 }

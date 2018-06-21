@@ -2,13 +2,23 @@ package com.example.yaakovblumer.takego_clientside.controller;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.R;
+import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
+import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +33,13 @@ public class cars extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    ListView ListOfCars;
+    static String temp=new String("");
+    ArrayAdapter<Car> carArrayAdapter;
+    static ArrayList<Car> carArrayList=new ArrayList<>();
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,7 +82,51 @@ public class cars extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cars, container, false);
+
+        View view=inflater.inflate(R.layout.fragment_cars, container, false);
+
+        ListOfCars =  (ListView)view.findViewById( R.id.ListOfCars );
+
+        temp="";
+
+        new AsyncTask<Void, Void, Void>() {
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                carArrayList.clear();
+                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable());
+                for (Car item : carArrayList) {
+                    temp+=item.ToString();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    super.onPostExecute(aVoid);
+                    // textView4.setText(temp);
+                    carArrayAdapter.notifyDataSetChanged();
+                    ListOfCars.setAdapter(carArrayAdapter);
+
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
+                   // Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+                }
+
+            }
+
+        }.execute();
+
+
+
+
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

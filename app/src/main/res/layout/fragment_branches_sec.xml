@@ -27,7 +27,9 @@
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:onClick="onButtom3Click"
+            android:text="הצג" />
+
 
         <TextView
             android:id="@+id/textView3"
@@ -36,10 +38,15 @@
             android:text="פרטי הסניף הנבחר" />
 
 
-
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="הזמן מכונית"/>
     </LinearLayout>
 </FrameLayout>
