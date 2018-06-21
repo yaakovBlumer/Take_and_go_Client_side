@@ -31,7 +31,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".controller.Register"  android:label="רישום לקוח"  ></activity>
+        <activity android:name=".controller.Fill_Details" />
+        <activity android:name=".controller.Register" />
+        <activity android:name=".controller.take_and_go" />
     </application>
 
 </manifest>

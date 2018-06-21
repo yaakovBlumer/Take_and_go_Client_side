@@ -375,7 +375,7 @@ public class MySQL_DB_manager implements DataSource
     }
 
     @Override
-    public void closeOrder(String orderNum, int mileage) {
+    public void closeOrder(String orderNum) {
 
         try
         {
@@ -383,7 +383,6 @@ public class MySQL_DB_manager implements DataSource
 
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.OrderConst.ORDER_NUM, orderNum);
-            contentValues.put(ConstantsAndEnums.CarConst.MILEAGE, mileage);
 
             String result =  PHP_Tools.POST(url, contentValues);
 
