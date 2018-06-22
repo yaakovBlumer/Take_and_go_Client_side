@@ -1,11 +1,14 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +20,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.yaakovblumer.takego_clientside.R;
+import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
+import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment odot, snifim, oto, kone;
+    NavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +58,12 @@ public class Home extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+        navigation = (NavigationView) findViewById(R.id.nav_view);
+       // navigation.setNavigationItemSelectedListener(this);
+        navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        changeFragement(snifim);
+
     }
 
     @Override
@@ -145,5 +156,28 @@ public class Home extends AppCompatActivity
         transaction.commit();
     }
 
+    private NavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new NavigationView.OnNavigationItemSelectedListener()
+    {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_about:
+                    changeFragement(odot);
+                    return true;
+                case R.id.navigation_branches:
+                    changeFragement(snifim);
+                    return true;
+                case R.id.navigation_cars:
+                    changeFragement(oto);
+                    return true;
+                case R.id.navigation_customer:
+                    changeFragement(kone);
+                    return true;
+
+            }
+            return false;
+        }
+    };
 
 }

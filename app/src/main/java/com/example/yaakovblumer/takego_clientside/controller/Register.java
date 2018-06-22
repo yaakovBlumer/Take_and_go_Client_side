@@ -86,7 +86,6 @@ public class Register extends AppCompatActivity {
                        // Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
 
                         startActivity(intent_home);
-
                     }
                 }
 

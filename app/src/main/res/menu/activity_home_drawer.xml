@@ -5,21 +5,21 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/navigation_about"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="אודות" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/navigation_branches"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="סניפים" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/navigation_cars"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="מכוניות" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/navigation_customer"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="מכונית בהזמנה" />
     </group>
 
     <item android:title="Communicate">
