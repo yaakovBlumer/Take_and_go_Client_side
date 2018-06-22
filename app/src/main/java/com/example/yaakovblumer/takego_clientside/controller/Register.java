@@ -80,7 +80,7 @@ public class Register extends AppCompatActivity {
                     super.onPostExecute(idResult);
                     if (idResult > 0)
                     {
-                        Toast.makeText(getBaseContext(), "insert id: " + id.getText().toString(), Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getBaseContext(), "insert id: " + id.getText().toString(), Toast.LENGTH_LONG).show();
                         mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
 
                        // Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
