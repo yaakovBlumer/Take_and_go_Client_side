@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class LookingForBusyCarService extends IntentService {
     ArrayList<Car> carAvailable=new ArrayList<Car>();
     ArrayList<Car> tempCarAvailable=new ArrayList<Car>();
     ArrayList<Car> lastCarAvailable=new ArrayList<Car>();
+    LogIn login=new LogIn();
 
     boolean isFirstTime=true;
     static int count = 1;
@@ -43,17 +45,107 @@ public class LookingForBusyCarService extends IntentService {
 
     public LookingForBusyCarService() {
         super("LookingForBusyCarService");
+
         id = count++;     }
 
         @Override
         protected void onHandleIntent(Intent intent) {
         while (isRun) {
             try {
+                if(isFirstTime) {
+                    isFirstTime = false;
 
-                if(isFirstTime)
+                    new AsyncTask<Void, Void, Void>() {
+
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+
+                            carAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+
+                            super.onPostExecute(aVoid);
+                            Intent broadcastIntent = new Intent();
+                            broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
+                            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                            //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
+                            //String currentDateandTime = sdf.format(new Date());
+                            broadcastIntent.putExtra(PARAM_OUT_MSG, "Cars available: " + carAvailable.toString());
+                            sendBroadcast(broadcastIntent);
+
+                            Log.d("LookingForBusyCarService", "Start Sending message..");
+                            // Toast.makeText(this, "Service Sending", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }.execute();
+
+                }
+                else
+                {
+
+                    new AsyncTask<Void, Void, Void>() {
+
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+
+                            tempCarAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+
+                            super.onPostExecute(aVoid);
+
+
+
+                            for (Car item : tempCarAvailable) {
+                                if (!carAvailable.contains(item))
+                                    lastCarAvailable.add(item);
+                            }
+
+                            carAvailable=tempCarAvailable;
+                            if(!lastCarAvailable.isEmpty())
+                            {
+                                Intent broadcastIntent = new Intent();
+                                broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
+                                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                                //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
+                                //String currentDateandTime = sdf.format(new Date());
+                                broadcastIntent.putExtra(PARAM_OUT_MSG, "Last cars available: " + lastCarAvailable.toString());
+                                sendBroadcast(broadcastIntent);
+                                Log.d("LookingForBusyCarService", "Last cars available: " + lastCarAvailable.toString());
+                            }
+
+                        try {
+                            Thread.sleep(1000*10);
+                        }
+                        catch(InterruptedException e) {e.printStackTrace();}
+
+
+
+
+
+                        }
+
+                    }.execute();
+
+                }
+
+             /*   if(isFirstTime)
                 {
                     isFirstTime=false;
-                    carAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+                     login.carAvailableList(carAvailable);
+                            //FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
 
                     Intent broadcastIntent = new Intent();
                     broadcastIntent.setAction(ResponseReceiver.ACTION_RESP);
@@ -70,7 +162,8 @@ public class LookingForBusyCarService extends IntentService {
 
                 else {
 
-                    tempCarAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+                     login.carAvailableList(tempCarAvailable);
+                    //FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
 
                     for (Car item : tempCarAvailable) {
                         if (!carAvailable.contains(item))
@@ -93,8 +186,9 @@ public class LookingForBusyCarService extends IntentService {
                 }
 
                 Thread.sleep(1000*10);
+                */
             }
-            catch(InterruptedException e) {e.printStackTrace();}
+           // catch(InterruptedException e) {e.printStackTrace();}
             catch (Exception e) { e.getMessage();}
            // Log.d(TAG, serviceInfo() + " print ...");
         }     }
@@ -105,10 +199,12 @@ public class LookingForBusyCarService extends IntentService {
             }
 
             @Override
-            public void onCreate() {
-        super.onCreate();
-        id++;
-        Log.d(TAG, serviceInfo() + " onCreate ...");
+            public void onCreate()
+            {
+                super.onCreate();
+
+                id++;
+                Log.d(TAG, serviceInfo() + " onCreate ...");
 
     /////////////////////
                 Notification.Builder nBuilder = new Notification.Builder(getBaseContext());

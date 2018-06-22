@@ -31,10 +31,10 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".controller.Fill_Details" />
         <activity android:name=".controller.Register" />
+
         <activity
-            android:name=".Home"
+            android:name=".controller.Home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
