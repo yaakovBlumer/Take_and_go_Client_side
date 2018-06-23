@@ -27,8 +27,11 @@ import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Fragment odot, snifim, oto, kone;
-    NavigationView navigation;
+    about odot=null;
+    Branches_sec snifim=null;
+    cars oto = null;
+    customer kone=null;
+    NavigationView navigation=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

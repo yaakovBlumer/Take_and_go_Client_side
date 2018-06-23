@@ -126,7 +126,6 @@ public class LogIn extends AppCompatActivity {
 
                         //good id and error with password.
                         else if (customer != null && customer.getId().equals(ourId)) {
-                            mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
                             Toast.makeText(getBaseContext(), "Error with password.", Toast.LENGTH_SHORT).show();
                         }
 
