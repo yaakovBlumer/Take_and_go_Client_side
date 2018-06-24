@@ -1,17 +1,11 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,17 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
-import com.example.yaakovblumer.takego_clientside.model.entities.Car;
 import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
-
-import java.util.ArrayList;
-
-import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ResponseReceiver2.ACTION_RESP;
+import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ResponseReceiver.ACTION_RESP;
 
 public class LogIn extends AppCompatActivity {
 
@@ -47,7 +36,6 @@ public class LogIn extends AppCompatActivity {
 
 
     private ResponseReceiver receiver;
-    private ResponseReceiver2 receiver2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +52,11 @@ public class LogIn extends AppCompatActivity {
 
         ///////////////////////
 
-       // IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
         IntentFilter filter = new IntentFilter(ACTION_RESP);
 
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new ResponseReceiver();
-        receiver2=new ResponseReceiver2();
-        registerReceiver(receiver2, filter);
+        receiver=new ResponseReceiver();
+        registerReceiver(receiver, filter);
 
         ///////////////////////
 
@@ -172,7 +158,7 @@ public class LogIn extends AppCompatActivity {
     private NotificationManager notifManager;
 
 
-    public class ResponseReceiver2 extends BroadcastReceiver {
+    public class ResponseReceiver extends BroadcastReceiver {
 
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
