@@ -41,8 +41,13 @@ public class Branches_sec extends Fragment {
 
     ListView _dynamic;
 
+    public interface OnFragmentInteractionListener {
 
-    //private OnFragmentInteractionListener mListener;
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+    private OnFragmentInteractionListener mListener;
 
     public Branches_sec() {
         // Required empty public constructor
@@ -114,8 +119,8 @@ public class Branches_sec extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        */
-    }
+
+    }*/
 
     @Override
     public void onDetach() {

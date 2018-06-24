@@ -35,8 +35,13 @@ public class cars extends Fragment {
     ArrayAdapter<Car> carArrayAdapter;
     static ArrayList<Car> carArrayList=new ArrayList<>();
 
-    //private OnFragmentInteractionListener mListener;
+    public interface OnFragmentInteractionListener {
 
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+    private cars.OnFragmentInteractionListener mListener;
     public cars() {
         // Required empty public constructor
     }
@@ -111,8 +116,8 @@ public class cars extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        */
-    }
+
+    }*/
 
     @Override
     public void onDetach() {
