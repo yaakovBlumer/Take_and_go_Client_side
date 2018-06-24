@@ -27,11 +27,7 @@ import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    about odot=null;
-    Branches_sec snifim=null;
-    cars oto = null;
-    customer kone=null;
-    NavigationView navigation=null;
+    Fragment odot, snifim, oto, kone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +57,11 @@ public class Home extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        navigation = (NavigationView) findViewById(R.id.nav_view);
-       // navigation.setNavigationItemSelectedListener(this);
-        navigation.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        changeFragement(snifim);
-
+        //navigationView.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+       // changeFragement(snifim);
     }
 
     @Override
@@ -94,45 +89,20 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.navigation_about){
+                changeFragement(odot);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
 
-/*
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-*/
-
-
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_about:
                 changeFragement(odot);
@@ -148,17 +118,22 @@ public class Home extends AppCompatActivity
                 return true;
 
         }
-        return false;
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 
     protected void changeFragement(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frgamentContainer, fragment);
+        transaction.replace(R.id.drawer_layout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
+
+    /*
     private NavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new NavigationView.OnNavigationItemSelectedListener()
     {
@@ -183,4 +158,6 @@ public class Home extends AppCompatActivity
         }
     };
 
+
+    */
 }

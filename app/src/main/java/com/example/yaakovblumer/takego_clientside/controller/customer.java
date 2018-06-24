@@ -24,24 +24,7 @@ import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link customer.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link customer#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class customer extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     TextView textView8, textView10, textView12, textView14, textView16, textView18, textView20, textView22, textView24;
 
@@ -53,37 +36,15 @@ public class customer extends Fragment {
     static ArrayList<CarModel> carModelArrayList=new ArrayList<>();
     Car car;
     CarModel carModel;
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     public customer() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment customer.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static customer newInstance(String param1, String param2) {
-        customer fragment = new customer();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -146,6 +107,7 @@ public class customer extends Fragment {
         return view;
     }
 
+    /*
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -181,20 +143,17 @@ public class customer extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
+*/
 
 
     public void CloseOrderBtm(View view)
     {
         int kilometer=5400;
-
-
-
 
         new AsyncTask<Void, Void, Void>() {
 
