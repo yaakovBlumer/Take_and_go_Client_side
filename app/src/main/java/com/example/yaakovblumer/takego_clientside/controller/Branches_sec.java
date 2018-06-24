@@ -32,7 +32,7 @@ public class Branches_sec extends Fragment {
     static ArrayList<Car> carArrayList=new ArrayList<>();
 
     static String temp=new String("");
-    ArrayAdapter<Branch> branchArrayAdapter;
+    ArrayAdapter<Branch> branchArrayAdapter=null;
     ArrayAdapter<Car> carArrayAdapter;
 
     Spinner spinner;
