@@ -127,7 +127,7 @@ public class Home extends AppCompatActivity
 
     protected void changeFragement(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.drawer_layout, fragment);
+        transaction.replace(R.id.frgament_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
