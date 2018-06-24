@@ -20,7 +20,7 @@
         </activity>
 
         <receiver
-            android:name=".controller.LogIn$ResponseReceiver2"
+            android:name=".controller.LogIn$ResponseReceiver"
             android:enabled="true"
             android:exported="true" />
 

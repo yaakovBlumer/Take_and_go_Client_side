@@ -182,8 +182,6 @@ public class LogIn extends AppCompatActivity {
 
                 String outMsg = intent.getStringExtra(this.PARAM_OUT_MSG);
 
-        //        LogIn login = new LogIn();
-      //          login.Notify("Take&Go Client side-Receiver", outMsg);
                 Notify("Take&Go Client side-Receiver", outMsg);
 
                 Log.d("Take&Go Client side-Receiver", outMsg);
