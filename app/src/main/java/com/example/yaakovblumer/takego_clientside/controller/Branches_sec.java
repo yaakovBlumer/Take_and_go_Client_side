@@ -25,20 +25,8 @@ import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Branches_sec.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Branches_sec#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Branches_sec extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
+public class Branches_sec extends Fragment {
 
     static ArrayList<Branch> branchArrayList=new ArrayList<>();
     static ArrayList<Car> carArrayList=new ArrayList<>();
@@ -53,54 +41,22 @@ public class Branches_sec extends Fragment {
 
     ListView _dynamic;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     public Branches_sec() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Branches_sec.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Branches_sec newInstance(String param1, String param2) {
-        Branches_sec fragment = new Branches_sec();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
-
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
 
         View view=inflater.inflate(R.layout.fragment_branches_sec, container, false);
 
@@ -138,14 +94,9 @@ public class Branches_sec extends Fragment {
             }
         }.execute();
 
-
         return view;
-
-
-
-
     }
-
+/*
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -179,12 +130,13 @@ public class Branches_sec extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
+*/
 
     public ArrayList<String> getALLBranchesCode(ArrayList<Branch> CarModelList )
     {
@@ -232,8 +184,6 @@ public class Branches_sec extends Fragment {
         }.execute();
     }
 
-
-
     public void orderCarButton(View view){
 
         new AsyncTask<Void, Void, Long>() {
@@ -265,11 +215,5 @@ public class Branches_sec extends Fragment {
 
             }
         }.execute();
-
-
-
     }
-
-
-
 }

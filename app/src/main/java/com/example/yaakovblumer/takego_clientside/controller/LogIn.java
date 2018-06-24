@@ -39,7 +39,7 @@ public class LogIn extends AppCompatActivity {
     Intent intent_register = new Intent();
     Intent intent_home = new Intent();
 
-    // private static final View view=null;
+    private static final View view=null;
 
 
     EditText id, password;
@@ -56,7 +56,7 @@ public class LogIn extends AppCompatActivity {
         customer = new Customer();
         mySharedPreferences = new MYSharedPreferences();
         intent_register.setClass(getApplicationContext(), Register.class);
-        intent_home.setClass(getApplicationContext(), Home.class);
+       // intent_home.setClass(getApplicationContext(), Home.class);
 
 
         ///////////////////////
@@ -121,7 +121,6 @@ public class LogIn extends AppCompatActivity {
                             //Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
 
                             startActivity(intent_home);
-
                         }
 
                         //good id and error with password.
