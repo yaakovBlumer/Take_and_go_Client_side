@@ -1,10 +1,12 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
-import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,15 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
-import com.example.yaakovblumer.takego_clientside.model.entities.Car;
 import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
-
-import java.util.ArrayList;
+import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ResponseReceiver.ACTION_RESP;
 
 public class LogIn extends AppCompatActivity {
 
@@ -28,21 +27,13 @@ public class LogIn extends AppCompatActivity {
     Customer customer;
     String ourId = "";
     String ourPass = "";
-    boolean tmpFlag = false;
-    boolean elseFlag = false;
-    boolean ifFlag = false;
-    ArrayList<Car> carAvailable=null;
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int ID_LENGTH = 9;
-    private static String Id = "";
-    private static String Password = "";
     Intent intent_register = new Intent();
     Intent intent_home = new Intent();
 
-    private static final View view=null;
-
-
     EditText id, password;
+
 
     private ResponseReceiver receiver;
 
@@ -56,15 +47,15 @@ public class LogIn extends AppCompatActivity {
         customer = new Customer();
         mySharedPreferences = new MYSharedPreferences();
         intent_register.setClass(getApplicationContext(), Register.class);
-       // intent_home.setClass(getApplicationContext(), Home.class);
+        intent_home.setClass(getApplicationContext(), Home.class);
 
 
         ///////////////////////
-       // startService(new Intent(getBaseContext(), LookingForBusyCarService.class));
 
-        IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESP);
+        IntentFilter filter = new IntentFilter(ACTION_RESP);
+
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new ResponseReceiver();
+        receiver=new ResponseReceiver();
         registerReceiver(receiver, filter);
 
         ///////////////////////
@@ -88,9 +79,9 @@ public class LogIn extends AppCompatActivity {
             //everything is good.
             if (mySharedPreferences.isStringExistsInSharedPreferences(this, ourId, "ID") == true
                     && mySharedPreferences.isStringExistsInSharedPreferences(this, ourPass, "PASSWORD") == true)
-                startActivity(new Intent(LogIn.this, Home.class));
+              //  startActivity(new Intent(LogIn.this, Home.class));
 
-                //startActivity(intent_home);
+                startActivity(intent_home);
                 // Toast.makeText(this, "Load Application..", Toast.LENGTH_SHORT).show();
 
 //good id and error with password.
@@ -121,11 +112,11 @@ public class LogIn extends AppCompatActivity {
                             //Toast.makeText(getBaseContext(), "Load Application..", Toast.LENGTH_SHORT).show();
 
                             startActivity(intent_home);
+
                         }
 
                         //good id and error with password.
                         else if (customer != null && customer.getId().equals(ourId)) {
-                            mySharedPreferences.saveSharedPreferences(getBaseContext(), ourId, ourPass);
                             Toast.makeText(getBaseContext(), "Error with password.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -163,28 +154,148 @@ public class LogIn extends AppCompatActivity {
         startActivity(new Intent(LogIn.this, Register.class));
     }
 
-   public  void carAvailableList(final ArrayList<Car> car_available) {
-        new AsyncTask<Void, Void, Void>() {
+
+    private NotificationManager notifManager;
 
 
-            @Override
-            protected Void doInBackground(Void... params) {
+    public class ResponseReceiver extends BroadcastReceiver {
 
-                carAvailable = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+        // TODO: This method is called when the BroadcastReceiver is receiving
+        // an Intent broadcast.
+        public static final String ACTION_RESP =
+                "takego_clientside.yaakovblumer.example.com.intent.action.MESSAGE_PROCESSED";
 
-                return null;
+
+        public static final String PARAM_OUT_MSG = "OUT_MESSAGE";
+        private Context getBaseContext() {
+            return this.getBaseContext();
+        }
+
+
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                Log.d("Response Receiver", "message come...");
+
+
+                String outMsg = intent.getStringExtra(this.PARAM_OUT_MSG);
+
+        //        LogIn login = new LogIn();
+      //          login.Notify("Take&Go Client side-Receiver", outMsg);
+                Notify("Take&Go Client side-Receiver", outMsg);
+
+                Log.d("Take&Go Client side-Receiver", outMsg);
+
+
+            } catch (Exception ex) {
+                Log.w(ConstantsAndEnums.Log.APP_LOG, ex.getMessage());
             }
+        }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-
-                super.onPostExecute(aVoid);
-                car_available.addAll(carAvailable);
-            }
-
-        }.execute();
 
 
     }
+
+    public void Notify(String notificationTitle, String notificationMessage) {
+
+
+     //////////////////////////////
+        /*
+            final int NOTIFY_ID = 1002;
+
+
+            // There are hardcoding only for show it's just strings
+            String name = "my_package_channel";
+            String id = "my_package_channel_1"; // The user-visible name of the channel.
+            String description = "my_package_first_channel"; // The user-visible description of the channel.
+
+            Intent intent;
+            PendingIntent pendingIntent;
+            NotificationCompat.Builder builder;
+
+            if (notifManager == null) {
+                notifManager =
+                        (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel mChannel = notifManager.getNotificationChannel(id);
+                if (mChannel == null) {
+                    mChannel = new NotificationChannel(id, name, importance);
+                    mChannel.setDescription(description);
+                    mChannel.enableVibration(true);
+                    mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                    notifManager.createNotificationChannel(mChannel);
+                }
+                builder = new NotificationCompat.Builder(this, id);
+
+                intent = new Intent(this, NotificationView.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+                builder.setContentTitle(notificationTitle)  // required
+                        .setSmallIcon(android.R.drawable.ic_popup_reminder) // required
+                        .setContentText(notificationMessage)  // required
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker(notificationTitle)
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            } else {
+
+                builder = new NotificationCompat.Builder(this);
+
+                intent = new Intent(this, NotificationView.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+                builder.setContentTitle(notificationTitle)                           // required
+                        .setSmallIcon(android.R.drawable.ic_popup_reminder) // required
+                        .setContentText(notificationMessage)  // required
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker(notificationTitle)
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                        .setPriority(Notification.PRIORITY_HIGH);
+            } // else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            Notification notification = builder.build();
+            notifManager.notify(NOTIFY_ID, notification);
+
+*/
+        ///////////////////////////////////////
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_car_rent_notification)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationMessage)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+
+         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+       /* Intent resultIntent = new Intent(this, NotificationView.class);
+        resultIntent.putExtra("text",notificationMessage);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(NotificationView.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        builder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);*/
+        notificationManager.notify(888, builder.build());
+
+
+    }
+
 
 }

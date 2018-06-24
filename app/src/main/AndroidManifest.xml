@@ -19,19 +19,13 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".controller.LookingForBusyCarService"
-            android:enabled="true"
-            android:exported="true">
-            >
-        </service>
-
         <receiver
-            android:name=".controller.ResponseReceiver"
+            android:name=".controller.LogIn$ResponseReceiver2"
             android:enabled="true"
             android:exported="true" />
 
         <activity android:name=".controller.Register" />
+
 
         <activity
             android:name=".controller.Home"
