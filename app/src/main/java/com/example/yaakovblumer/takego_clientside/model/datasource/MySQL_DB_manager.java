@@ -204,6 +204,23 @@ public class MySQL_DB_manager implements DataSource
 
     @Override
     public Car isExistsCar(String carNumber) {
+        try
+        {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisCarExists.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, carNumber);
+            String result =PHP_Tools.POST(url, contentValues);
+            //JSONObject jsonObject=new JSONObject(result);
+            //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+            //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+            Car car=ConstantsAndEnums.ContentValuesToCar(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+            return car;
+        }
+        catch (Exception e)
+        {
+            printLog("addOrder Exception:\n" + e);
+
+        }
         return null;
     }
 

@@ -99,16 +99,17 @@ public class customer extends Fragment {
 
         }.execute();
 
-
-        textView8.setText(carModel.getModelName());
-        textView10.setText(carModel.getCompanyName());
-        textView12.setText(carModel.getEngineVolume());
-        textView14.setText(carModel.getGearbox().toString());
-        textView16.setText(carModel.getNumOfSeats());
-        textView18.setText(carModel.getCarKind().toString());
-        textView20.setText(car.getProductionDate());
-        textView22.setText(car.getMileage());
-        textView24.setText(car.getLicenseNumber());
+if(carModel!=null) {
+    textView8.setText(carModel.getModelName());
+    textView10.setText(carModel.getCompanyName());
+    textView12.setText(carModel.getEngineVolume());
+    textView14.setText(carModel.getGearbox().toString());
+    textView16.setText(carModel.getNumOfSeats());
+    textView18.setText(carModel.getCarKind().toString());
+    textView20.setText(car.getProductionDate());
+    textView22.setText(car.getMileage());
+    textView24.setText(car.getLicenseNumber());
+}
 
 
         return view;
