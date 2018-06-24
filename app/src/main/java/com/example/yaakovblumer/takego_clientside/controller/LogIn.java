@@ -3,6 +3,7 @@ package com.example.yaakovblumer.takego_clientside.controller;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,6 +28,7 @@ import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 import java.util.Map;
+import java.util.Random;
 
 import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ResponseReceiver.ACTION_RESP;
 
@@ -211,19 +214,54 @@ public class LogIn extends AppCompatActivity {
 
     public void Notify(int id_notification,String notificationTitle, String notificationMessage) {
 
-        Notification newMessageNotification = new NotificationCompat.Builder(LogIn.this, CHANNEL_ID)
+      //  Random random = new Random();
+       // int m = random.nextInt(9999 - 1000);
+
+        NotificationCompat.Builder mBuilder =new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_car_rent_notification)
                 .setContentTitle(notificationTitle)
-                .setContentText(notificationMessage)
-                .setGroup(GROUP_TAKE_AND_GO)
-                .setGroupSummary(true)
-                .setGroupAlertBehavior(2)
-                .build();
+                .setContentText(notificationMessage);
+        Intent intent = new Intent(this, LogIn.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(LogIn.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager)     this.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        mBuilder.setAutoCancel(true);
+        mNotificationManager.notify(id_notification, mBuilder.build());
 
 
-         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id_notification, newMessageNotification);
+                mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_car_rent_notification);
+
+        NotificationCompat.InboxStyle inboxStyle =
+               new NotificationCompat.InboxStyle();
+
+        inboxStyle.setBigContentTitle("New car/s available.");
+
+
+        inboxStyle.setSummaryText("Take&Go- Receiver service");
+
+
+
+        mBuilder.setStyle(inboxStyle);
+
+                stackBuilder = TaskStackBuilder.create(this);
+
+       stackBuilder.addNextIntent(intent);
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(pIntent);
+
+                mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        mBuilder.setAutoCancel(true);
+        mNotificationManager.notify(0, mBuilder.build());
 
 
     }
