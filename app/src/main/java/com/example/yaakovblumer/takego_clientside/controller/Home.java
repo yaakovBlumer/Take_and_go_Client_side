@@ -114,16 +114,21 @@ public class Home extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.navigation_about:
                 changeFragement(odot);
-                return true;
+                break;
+             //   return true;
             case R.id.navigation_branches:
                 changeFragement(snifim);
-                return true;
+                break;
+            //   return true;
             case R.id.navigation_cars:
                 changeFragement(oto);
-                return true;
+                break;
+            //   return true;
             case R.id.navigation_customer:
                 changeFragement(kone);
-                return true;
+                break;
+            //   return true;
+                default: break;
 
         }
 
