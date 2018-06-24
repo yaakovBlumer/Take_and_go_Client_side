@@ -1,12 +1,19 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,9 +26,18 @@ import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
 import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
+
+import java.util.Map;
+import java.util.Random;
+
 import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ResponseReceiver.ACTION_RESP;
 
 public class LogIn extends AppCompatActivity {
+
+    private static final String GROUP_TAKE_AND_GO = "com.example.yaakovblumer.takego_clientside.controller";
+    private static final String CHANNEL_ID ="26" ;
+    private static final int SUMMARY_ID = 0;
+    private int noti_id =1 ;
 
     MYSharedPreferences mySharedPreferences;
     Customer customer;
@@ -182,10 +198,10 @@ public class LogIn extends AppCompatActivity {
 
                 String outMsg = intent.getStringExtra(this.PARAM_OUT_MSG);
 
-                Notify("Take&Go Client side-Receiver", outMsg);
+                Notify(noti_id,"Take&Go Client side-Receiver", outMsg);
 
                 Log.d("Take&Go Client side-Receiver", outMsg);
-
+                noti_id++;
 
             } catch (Exception ex) {
                 Log.w(ConstantsAndEnums.Log.APP_LOG, ex.getMessage());
@@ -196,101 +212,56 @@ public class LogIn extends AppCompatActivity {
 
     }
 
-    public void Notify(String notificationTitle, String notificationMessage) {
+    public void Notify(int id_notification,String notificationTitle, String notificationMessage) {
 
+      //  Random random = new Random();
+       // int m = random.nextInt(9999 - 1000);
 
-     //////////////////////////////
-        /*
-            final int NOTIFY_ID = 1002;
-
-
-            // There are hardcoding only for show it's just strings
-            String name = "my_package_channel";
-            String id = "my_package_channel_1"; // The user-visible name of the channel.
-            String description = "my_package_first_channel"; // The user-visible description of the channel.
-
-            Intent intent;
-            PendingIntent pendingIntent;
-            NotificationCompat.Builder builder;
-
-            if (notifManager == null) {
-                notifManager =
-                        (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-                NotificationChannel mChannel = notifManager.getNotificationChannel(id);
-                if (mChannel == null) {
-                    mChannel = new NotificationChannel(id, name, importance);
-                    mChannel.setDescription(description);
-                    mChannel.enableVibration(true);
-                    mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-                    notifManager.createNotificationChannel(mChannel);
-                }
-                builder = new NotificationCompat.Builder(this, id);
-
-                intent = new Intent(this, NotificationView.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-                builder.setContentTitle(notificationTitle)  // required
-                        .setSmallIcon(android.R.drawable.ic_popup_reminder) // required
-                        .setContentText(notificationMessage)  // required
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setTicker(notificationTitle)
-                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            } else {
-
-                builder = new NotificationCompat.Builder(this);
-
-                intent = new Intent(this, NotificationView.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-                builder.setContentTitle(notificationTitle)                           // required
-                        .setSmallIcon(android.R.drawable.ic_popup_reminder) // required
-                        .setContentText(notificationMessage)  // required
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setTicker(notificationTitle)
-                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
-                        .setPriority(Notification.PRIORITY_HIGH);
-            } // else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            Notification notification = builder.build();
-            notifManager.notify(NOTIFY_ID, notification);
-
-*/
-        ///////////////////////////////////////
-
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder mBuilder =new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_car_rent_notification)
                 .setContentTitle(notificationTitle)
-                .setContentText(notificationMessage)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-
-         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-       /* Intent resultIntent = new Intent(this, NotificationView.class);
-        resultIntent.putExtra("text",notificationMessage);
-
+                .setContentText(notificationMessage);
+        Intent intent = new Intent(this, LogIn.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(NotificationView.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        builder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);*/
-        notificationManager.notify(888, builder.build());
+        stackBuilder.addParentStack(LogIn.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager)     this.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        mBuilder.setAutoCancel(true);
+        mNotificationManager.notify(id_notification, mBuilder.build());
+
+
+
+                mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_car_rent_notification);
+
+        NotificationCompat.InboxStyle inboxStyle =
+               new NotificationCompat.InboxStyle();
+
+        inboxStyle.setBigContentTitle("New car/s available.");
+
+
+        inboxStyle.setSummaryText("Take&Go- Receiver service");
+
+
+
+        mBuilder.setStyle(inboxStyle);
+
+                stackBuilder = TaskStackBuilder.create(this);
+
+       stackBuilder.addNextIntent(intent);
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(pIntent);
+
+                mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+        mBuilder.setAutoCancel(true);
+        mNotificationManager.notify(0, mBuilder.build());
 
 
     }
