@@ -206,7 +206,7 @@ public class MySQL_DB_manager implements DataSource
     public Car isExistsCar(String carNumber) {
         try
         {
-            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisCarExists.php";
+            String url = WEB_URL + "/isCarExists.php";
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, carNumber);
             String result =PHP_Tools.POST(url, contentValues);
@@ -226,16 +226,67 @@ public class MySQL_DB_manager implements DataSource
 
     @Override
     public CarModel isExistsCarModel(String modelCode) {
+        try
+        {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisCarModelExists.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarModelConst.MODEL_CODE, modelCode);
+            String result =PHP_Tools.POST(url, contentValues);
+            //JSONObject jsonObject=new JSONObject(result);
+            //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+            //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+            CarModel carModel=ConstantsAndEnums.ContentValuesToCarModel(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+            return carModel;
+        }
+        catch (Exception e)
+        {
+            printLog("addOrder Exception:\n" + e);
+
+        }
         return null;
     }
 
     @Override
     public Branch isExistsBranch(String branchId) {
+        try
+        {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisBranchExists.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.BranchConst.BRANCH_NUM, branchId);
+            String result =PHP_Tools.POST(url, contentValues);
+            //JSONObject jsonObject=new JSONObject(result);
+            //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+            //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+            Branch branch=ConstantsAndEnums.ContentValuesToBranch(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+            return branch;
+        }
+        catch (Exception e)
+        {
+            printLog("addOrder Exception:\n" + e);
+
+        }
         return null;
     }
 
     @Override
     public Order isExistsOrder(String orderNum) {
+        try
+        {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8FisOrderExists.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.OrderConst.ORDER_NUM, orderNum);
+            String result =PHP_Tools.POST(url, contentValues);
+            //JSONObject jsonObject=new JSONObject(result);
+            //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
+            //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
+            Order order=ConstantsAndEnums.ContentValuesToOrder(PHP_Tools.JsonToContentValues(new JSONObject(result)));
+            return order;
+        }
+        catch (Exception e)
+        {
+            printLog("addOrder Exception:\n" + e);
+
+        }
         return null;
     }
 

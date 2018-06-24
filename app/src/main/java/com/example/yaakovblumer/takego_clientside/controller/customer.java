@@ -34,8 +34,8 @@ public class customer extends Fragment {
     ArrayAdapter<CarModel> carModelArrayAdapter;
     static ArrayList<Car> carArrayList=new ArrayList<>();
     static ArrayList<CarModel> carModelArrayList=new ArrayList<>();
-    Car car;
-    CarModel carModel;
+    Car car=null;
+    CarModel carModel=null;
 
     public interface OnFragmentInteractionListener {
 
