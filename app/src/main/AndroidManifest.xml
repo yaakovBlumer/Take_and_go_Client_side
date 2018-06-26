@@ -30,7 +30,7 @@
         <activity
             android:icon="@mipmap/ic_launcher2"
             android:name=".controller.Home"
-            android:label="@string/title_activity_home"
+            android:label="Take&amp;Go-Client Side"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

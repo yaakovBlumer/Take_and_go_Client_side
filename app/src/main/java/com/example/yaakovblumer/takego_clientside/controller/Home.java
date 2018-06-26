@@ -193,7 +193,7 @@ public class Home extends AppCompatActivity
 
     private cars getCarsFragment() {
         try {
-            if (Cars == null) {
+                if (Cars == null) {
                 Cars = new cars();
             }
 
@@ -253,7 +253,7 @@ public class Home extends AppCompatActivity
         new AsyncTask<Void, Void, Long>() {
 
 
-            Order order=new Order(
+          /*  Order order=new Order(
                     "468711",
                     ConstantsAndEnums.orderMode.OPEN,
                     getCarsFragment().ListOfCars.getSelectedItem().toString(),
@@ -264,7 +264,7 @@ public class Home extends AppCompatActivity
                     false,
                     3,
                     4,
-                    "45567");
+                    "45567");*/
 
             @Override
             protected void onPostExecute(Long idResult) {
@@ -275,7 +275,7 @@ public class Home extends AppCompatActivity
 
             @Override
             protected Long doInBackground(Void... params) {
-                return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                return null;//FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
 
             }
         }.execute();
@@ -344,8 +344,11 @@ public class Home extends AppCompatActivity
 
                          getBranches_secFragment().carListView.setAdapter(getBranches_secFragment().carArrayAdapter);
                     }
-                    if(getBranches_secFragment().carArrayList==null)
-                       getBranches_secFragment().carArrayList=new ArrayList<>();
+                    if(getBranches_secFragment().carArrayList==null) {
+                        getBranches_secFragment().carArrayList = new ArrayList<>();
+                        getBranches_secFragment().carArrayAdapter.clear();
+                        getBranches_secFragment().carArrayAdapter.notifyDataSetChanged();
+                    }
 
                 } catch (Exception e) {
                     Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
@@ -362,7 +365,7 @@ public class Home extends AppCompatActivity
         new AsyncTask<Void, Void, Long>() {
 
 
-            Order order=new Order(
+           /* Order order=new Order(
                     "468711",
                     ConstantsAndEnums.orderMode.OPEN,
                     getBranches_secFragment().carListView.getSelectedItem().toString(),
@@ -373,7 +376,7 @@ public class Home extends AppCompatActivity
                     false,
                     3,
                     4,
-                    "45567");
+                    "45567");  */
 
             @Override
             protected void onPostExecute(Long idResult) {
@@ -384,7 +387,7 @@ public class Home extends AppCompatActivity
 
             @Override
             protected Long doInBackground(Void... params) {
-                return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                return null; // FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
 
             }
         }.execute();
