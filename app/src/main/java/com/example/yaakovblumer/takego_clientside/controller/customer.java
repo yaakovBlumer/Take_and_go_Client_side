@@ -60,7 +60,7 @@ public class customer extends Fragment {
         // Inflate the layout for this fragment
 
         View view=inflater.inflate(R.layout.fragment_customer, container, false);
-
+/*
         textView8=(TextView)view.findViewById(R.id.textView8);
         textView10=(TextView)view.findViewById(R.id.textView10);
         textView12=(TextView)view.findViewById(R.id.textView12);
@@ -69,15 +69,15 @@ public class customer extends Fragment {
         textView18=(TextView)view.findViewById(R.id.textView18);
         textView20=(TextView)view.findViewById(R.id.textView20);
         textView22=(TextView)view.findViewById(R.id.textView22);
-        textView24=(TextView)view.findViewById(R.id.textView24);
+        textView24=(TextView)view.findViewById(R.id.textView24); */
 
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
 
-                car= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCar("77");
-                carModel= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCarModel(car.getModelCode());
+                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable());
+               // carModel= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCarModel(car.getModelCode());
 
                 return null;
             }
@@ -99,7 +99,8 @@ public class customer extends Fragment {
 
         }.execute();
 
-if(carModel!=null) {
+/*
+        if(carModel!=null) {
     textView8.setText(carModel.getModelName());
     textView10.setText(carModel.getCompanyName());
     textView12.setText(carModel.getEngineVolume());
@@ -109,7 +110,7 @@ if(carModel!=null) {
     textView20.setText(car.getProductionDate());
     textView22.setText(car.getMileage());
     textView24.setText(car.getLicenseNumber());
-}
+}  */
 
 
         return view;
@@ -161,32 +162,5 @@ if(carModel!=null) {
 */
 
 
-    public void CloseOrderBtm(View view)
-    {
-        int kilometer=5400;
 
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).closeOrder("1243");
-                return null;
-            }
-
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                try {
-                    super.onPostExecute(aVoid);
-
-                } catch (Exception e) {
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
-                  //  Toast.makeText( AddCar.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
-                }
-
-
-            }
-        }.execute();
-    }
 }

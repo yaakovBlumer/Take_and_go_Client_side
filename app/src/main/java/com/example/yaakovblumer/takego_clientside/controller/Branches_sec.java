@@ -1,9 +1,12 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
@@ -28,18 +32,19 @@ import java.util.Date;
 
 public class Branches_sec extends Fragment {
 
-    static ArrayList<Branch> branchArrayList=new ArrayList<>();
+   // static ArrayList<Branch> branchArrayList=new ArrayList<>();
     static ArrayList<Car> carArrayList=new ArrayList<>();
 
-    static String temp=new String("");
-    ArrayAdapter<Branch> branchArrayAdapter=null;
-    ArrayAdapter<Car> carArrayAdapter;
+    //ArrayAdapter<Branch> branchArrayAdapter=null;
+    ArrayAdapter<Car> carArrayAdapter=null;
 
-    Spinner spinner;
-    static ArrayList<Branch> BranchesSimpleList = null;
+    Spinner BranchNumSpinner;
+    static ArrayList<Branch> BranchesSimpleList = new ArrayList<Branch>();
     static ArrayList<String> BranchesCodeSimpleList = new ArrayList<String>();
+ListView carListView;
 
-    ListView _dynamic;
+
+    //  ListView _dynamic;
 
     public interface OnFragmentInteractionListener {
 
@@ -59,20 +64,25 @@ public class Branches_sec extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
 
         View view=inflater.inflate(R.layout.fragment_branches_sec, container, false);
+        carListView =  (ListView) view.findViewById( R.id.carListView );
+       CreateCarAdapter();
 
-        spinner=(Spinner)view.findViewById(R.id.spinner);
+        BranchNumSpinner=(Spinner)view.findViewById(R.id.BranchNumSpinner);
 
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
 
-                BranchesSimpleList= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranches();
+                BranchesSimpleList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranches());
                 return null;
             }
 
@@ -86,8 +96,8 @@ public class Branches_sec extends Fragment {
                     super.onPostExecute(aVoid);
                     BranchesCodeSimpleList.clear();
                     BranchesCodeSimpleList.addAll( getALLBranchesCode(BranchesSimpleList) );
-                    branchArrayAdapter.notifyDataSetChanged();
-                    spinner.setAdapter(branchArrayAdapter);
+                   // branchArrayAdapter.notifyDataSetChanged();
+                    BranchNumSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, BranchesCodeSimpleList));
 
                 } catch (Exception e) {
                     Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
@@ -101,7 +111,7 @@ public class Branches_sec extends Fragment {
 
         return view;
     }
-/*
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -118,15 +128,15 @@ public class Branches_sec extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
 
-    }*/
+    }
 
-    @Override
+   /* @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -157,70 +167,39 @@ public class Branches_sec extends Fragment {
     }
 
 
-    public void onButtom3Click(View view)
-    {
-        temp="";
-
-        new AsyncTask<Void, Void, Void>() {
 
 
+    @SuppressLint("StaticFieldLeak")
+    private void CreateCarAdapter() {
+        carArrayAdapter = new ArrayAdapter<Car>(getContext(), R.layout.car_row, carArrayList) {
+            @NonNull
             @Override
-            protected Void doInBackground(Void... params) {
-                carArrayList.clear();
-                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailableInBranch(spinner.getSelectedItem().toString()));
-
-                for (Car item : carArrayList) {
-                    temp+=item.ToString();
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = View.inflate(getContext(), R.layout.car_row, null);
                 }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                try {
-                    super.onPostExecute(aVoid);
-                    // textView4.setText(temp);
-                    carArrayAdapter.notifyDataSetChanged();
-                    _dynamic.setAdapter(carArrayAdapter);
 
-                } catch (Exception e) {
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
-                 //   Toast.makeText(Branches_sec.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
-                }
+                Car car = (Car) this.getItem(position);
+                TextView modelCode = (TextView) convertView.findViewById(R.id.modelCode);
+                TextView productionDate = (TextView) convertView.findViewById(R.id.productionDate);
+                TextView mileage = (TextView) convertView.findViewById(R.id.mileage);
+                TextView licenseNumber = (TextView) convertView.findViewById(R.id.licenseNumber);
+                TextView homeBranch = (TextView) convertView.findViewById(R.id.homeBranch);
+                TextView averageCostPerDay = (TextView) convertView.findViewById(R.id.averageCostPerDay);
+                TextView busy = (TextView) convertView.findViewById(R.id.busy);
+
+
+                modelCode.setText("Model Code:" + car.getModelCode());
+                productionDate.setText("Production Date:" + car.getProductionDate());
+                mileage.setText("Mileage: " + car.getMileage());
+                licenseNumber.setText("License Number:" + car.getLicenseNumber());
+                homeBranch.setText("Home Branch:" + car.getHomeBranch());
+                averageCostPerDay.setText("Average Cost Per Day: " + car.getAverageCostPerDay());
+                busy.setText("Busy:" + car.getBusy());
+                return convertView;
             }
-        }.execute();
+        };
     }
 
-    public void orderCarButton(View view){
-
-        new AsyncTask<Void, Void, Long>() {
-
-
-            Order order=new Order(
-                    "468711",
-                    ConstantsAndEnums.orderMode.OPEN,
-                    _dynamic.getSelectedItem().toString(),
-                    "22/06/93",
-                    "00/00/00",
-                    1,
-                    2,
-                    false,
-                    3,
-                    4,
-                    "45567");
-
-            @Override
-            protected void onPostExecute(Long idResult) {
-                super.onPostExecute(idResult);
-           //     if (idResult > 0)
-                  //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            protected Long doInBackground(Void... params) {
-                return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
-
-            }
-        }.execute();
-    }
 }

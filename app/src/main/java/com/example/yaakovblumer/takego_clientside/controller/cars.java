@@ -1,9 +1,12 @@
 package com.example.yaakovblumer.takego_clientside.controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 
 import com.example.yaakovblumer.takego_clientside.R;
-import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 import com.example.yaakovblumer.takego_clientside.model.entities.Car;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
@@ -30,10 +34,11 @@ import java.util.ArrayList;
  */
 public class cars extends Fragment {
 
-    ListView ListOfCars;
-    static String temp=new String("");
-    ArrayAdapter<Car> carArrayAdapter;
-    static ArrayList<Car> carArrayList=new ArrayList<>();
+
+
+    ListView ListOfCars=null;
+    ArrayAdapter<Car> carArray_Adapter=null;
+    static ArrayList<Car> car_ArrayList=new ArrayList<>();;
 
     public interface OnFragmentInteractionListener {
 
@@ -42,6 +47,7 @@ public class cars extends Fragment {
 
 
     private cars.OnFragmentInteractionListener mListener;
+
     public cars() {
         // Required empty public constructor
     }
@@ -53,27 +59,29 @@ public class cars extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+ {
         // Inflate the layout for this fragment
 
-        View view=inflater.inflate(R.layout.fragment_cars, container, false);
+        View view= inflater.inflate(R.layout.fragment_cars, container, false);
+            ListOfCars = (ListView) view.findViewById( R.id.ListOfCarsView );
+            CreateCar_Adapter();
 
-        ListOfCars =  (ListView)view.findViewById( R.id.ListOfCars );
 
-        temp="";
+
 
         new AsyncTask<Void, Void, Void>() {
 
 
             @Override
             protected Void doInBackground(Void... params) {
-                carArrayList.clear();
-                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable());
-                for (Car item : carArrayList) {
-                    temp+=item.ToString();
-                }
+                if(car_ArrayList==null)
+                    car_ArrayList =new ArrayList<>();
+                car_ArrayList.clear();
+                car_ArrayList=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
 
                 return null;
+
             }
 
             @Override
@@ -81,24 +89,31 @@ public class cars extends Fragment {
                 try {
                     super.onPostExecute(aVoid);
                     // textView4.setText(temp);
-                    carArrayAdapter.notifyDataSetChanged();
-                    ListOfCars.setAdapter(carArrayAdapter);
+                    if(car_ArrayList!=null) {
+                        carArray_Adapter.clear();
+                        carArray_Adapter.addAll(car_ArrayList);
+                        carArray_Adapter.notifyDataSetChanged();
+                        ListOfCars.setAdapter(carArray_Adapter);
+                    }
+                    if(car_ArrayList==null)
+                        car_ArrayList=new ArrayList<>();
 
 
                 } catch (Exception e) {
                     Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
-                   // Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+                   // Toast.makeText( , e.getMessage(), Toast.LENGTH_SHORT ).show();
                 }
 
             }
 
         }.execute();
 
+
         return view;
     }
 
 
-    /*
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -109,21 +124,21 @@ public class cars extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*
-        if (context instanceof OnFragmentInteractionListener) {
+
+     /*   if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
 
-    }*/
-
+    }
+/*
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -141,4 +156,40 @@ public class cars extends Fragment {
     }
 
     */
+
+
+    @SuppressLint("StaticFieldLeak")
+    private void CreateCar_Adapter() {
+        carArray_Adapter = new ArrayAdapter<Car>(this.getContext(), R.layout.car_row, car_ArrayList) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = View.inflate(this.getContext(), R.layout.car_row, null);
+                }
+
+
+                Car car = (Car) this.getItem(position);
+                TextView modelCode = (TextView) convertView.findViewById(R.id.modelCode);
+                TextView productionDate = (TextView) convertView.findViewById(R.id.productionDate);
+                TextView mileage = (TextView) convertView.findViewById(R.id.mileage);
+                TextView licenseNumber = (TextView) convertView.findViewById(R.id.licenseNumber);
+                TextView homeBranch = (TextView) convertView.findViewById(R.id.homeBranch);
+                TextView averageCostPerDay = (TextView) convertView.findViewById(R.id.averageCostPerDay);
+                TextView busy = (TextView) convertView.findViewById(R.id.busy);
+
+
+                modelCode.setText("Model Code:" + car.getModelCode());
+                productionDate.setText("Production Date:" + car.getProductionDate());
+                mileage.setText("Mileage: " + car.getMileage());
+                licenseNumber.setText("License Number:" + car.getLicenseNumber());
+                homeBranch.setText("Home Branch:" + car.getHomeBranch());
+                averageCostPerDay.setText("Average Cost Per Day: " + car.getAverageCostPerDay());
+                busy.setText("Busy:" + car.getBusy());
+                return convertView;
+            }
+        };
+    }
+
+
 }

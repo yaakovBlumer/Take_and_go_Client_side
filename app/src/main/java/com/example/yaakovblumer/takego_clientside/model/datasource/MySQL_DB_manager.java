@@ -188,6 +188,8 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.CustomerConst.ID, id);
             String result =PHP_Tools.POST(url, contentValues);
+                if(result.equals("0 results"))
+                    return null;
                 //JSONObject jsonObject=new JSONObject(result);
                 //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
                 //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
@@ -210,6 +212,8 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, carNumber);
             String result =PHP_Tools.POST(url, contentValues);
+            if(result.equals("0 results"))
+                return null;
             //JSONObject jsonObject=new JSONObject(result);
             //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
             //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
@@ -232,6 +236,8 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.CarModelConst.MODEL_CODE, modelCode);
             String result =PHP_Tools.POST(url, contentValues);
+            if(result.equals("0 results"))
+                return null;
             //JSONObject jsonObject=new JSONObject(result);
             //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
             //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
@@ -254,6 +260,8 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.BranchConst.BRANCH_NUM, branchId);
             String result =PHP_Tools.POST(url, contentValues);
+            if(result.equals("0 results"))
+                return null;
             //JSONObject jsonObject=new JSONObject(result);
             //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
             //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
@@ -276,6 +284,8 @@ public class MySQL_DB_manager implements DataSource
             ContentValues contentValues=new ContentValues();
             contentValues.put(ConstantsAndEnums.OrderConst.ORDER_NUM, orderNum);
             String result =PHP_Tools.POST(url, contentValues);
+            if(result.equals("0 results"))
+                return null;
             //JSONObject jsonObject=new JSONObject(result);
             //ContentValues contentValues2 = PHP_Tools.JsonToContentValues(jsonObject);
             //Customer customer=ConstantsAndEnums.ContentValuesToCustomer(contentValues2);
@@ -329,7 +339,8 @@ public class MySQL_DB_manager implements DataSource
 
             String str = PHP_Tools.GET(WEB_URL + "/getCarsAvailable.php");
             JSONArray array = new JSONObject(str).getJSONArray("Cars");
-
+            if(array.equals("0 results"))
+                return null;
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jsonObject = array.getJSONObject(i);
@@ -358,6 +369,8 @@ public class MySQL_DB_manager implements DataSource
             contentValues.put(ConstantsAndEnums.CarConst.HOME_BRANCH, id);
 
             String result = PHP_Tools.POST(url, contentValues);
+            if(result.equals("0 results"))
+                return null;
 
             JSONArray array = new JSONObject(result).getJSONArray("Cars");
 
@@ -396,6 +409,8 @@ public class MySQL_DB_manager implements DataSource
 
             String result =  PHP_Tools.POST(url, contentValues);
             JSONArray array = new JSONObject(result).getJSONArray("Branches");
+            if(array.equals("0 results"))
+                return null;
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jsonObject = array.getJSONObject(i);
@@ -424,6 +439,8 @@ public class MySQL_DB_manager implements DataSource
         {
             String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetOrders.php");
             JSONArray array = new JSONObject(str).getJSONArray("Orders");
+            if(array.equals("0 results"))
+                return null;
 
             for (int i = 0; i < array.length(); i++)
             {

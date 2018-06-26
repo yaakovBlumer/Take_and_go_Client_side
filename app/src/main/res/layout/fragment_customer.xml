@@ -117,9 +117,11 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/closeOrderButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="סגור הזמנה" />
+            android:text="סגור הזמנה"
+            android:onClick="closeOrderOnClick"
+            android:visibility="visible" />
     </LinearLayout>
 </FrameLayout>
