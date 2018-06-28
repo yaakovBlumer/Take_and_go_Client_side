@@ -29,23 +29,17 @@ public class MYSharedPreferences {
         if (flag.equals(value))
             return true;
         return false;
-
-
-       /*  if (sharedPreferences.contains(key))
-
-       {
-            Map<String, ?> keys = sharedPreferences.getAll();
-            for (Map.Entry<String, ?> entry : keys.entrySet())
-            {
-                if (entry.getKey().equals(key) && entry.getValue().equals(value) )
-                    return true;
-                //Toast.makeText(context, "load id", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        return false;   */
     }
+
+
+    public String idInSharedPreferencesNow(android.content.Context context) throws Exception {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String flag="";
+        flag=sharedPreferences.getString("ID","");
+        return flag;
+    }
+
 
 
     public void saveSharedPreferences(android.content.Context context, String id, String password) {

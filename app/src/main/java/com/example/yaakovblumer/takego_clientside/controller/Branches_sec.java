@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -42,6 +43,8 @@ public class Branches_sec extends Fragment {
     static ArrayList<Branch> BranchesSimpleList = new ArrayList<Branch>();
     static ArrayList<String> BranchesCodeSimpleList = new ArrayList<String>();
 ListView carListView;
+    Car selectedCarB=null;
+
 
 
     //  ListView _dynamic;
@@ -73,41 +76,40 @@ ListView carListView;
 
         View view=inflater.inflate(R.layout.fragment_branches_sec, container, false);
         carListView =  (ListView) view.findViewById( R.id.carListView );
+        carListView.setClickable(true);
+        carListView.setSelected(true);
        CreateCarAdapter();
-
-        BranchNumSpinner=(Spinner)view.findViewById(R.id.BranchNumSpinner);
-
-        new AsyncTask<Void, Void, Void>() {
-
+       ////////////////////////
+        carListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            protected Void doInBackground(Void... params) {
-
-                BranchesSimpleList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranches());
-                return null;
+            public void onItemSelected(AdapterView<?> carArrayAdapter, View view, int position, long l) {
+                selectedCarB=(Car) carListView.getItemAtPosition(position);
             }
-
-
             @Override
-            protected void onPostExecute(Void aVoid) {
-                try {
-                    if(BranchesCodeSimpleList == null){
-                        BranchesCodeSimpleList = new ArrayList<>( );
-                    }
-                    super.onPostExecute(aVoid);
-                    BranchesCodeSimpleList.clear();
-                    BranchesCodeSimpleList.addAll( getALLBranchesCode(BranchesSimpleList) );
-                   // branchArrayAdapter.notifyDataSetChanged();
-                    BranchNumSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, BranchesCodeSimpleList));
-
-                } catch (Exception e) {
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
-                //    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
-
-                }
-
-
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // your stuff
             }
-        }.execute();
+        });
+
+
+
+        carListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                selectedCarB=(Car) carListView.getItemAtPosition(i);
+
+                String s = ((Car) carListView.getItemAtPosition(i)).getLicenseNumber();
+
+                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+               // adapter.dismiss(); // If you want to close the adapter
+            }
+        });
+
+        BranchNumSpinner = (Spinner) view.findViewById(R.id.BranchNumSpinner);
+
+
+        updateSpinner();
 
         return view;
     }
@@ -200,6 +202,49 @@ ListView carListView;
                 return convertView;
             }
         };
+    }
+
+
+    public void updateSpinner() {
+        /////////////////////////
+
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                BranchesSimpleList=new ArrayList<>();
+                BranchesSimpleList.clear();
+
+                BranchesSimpleList=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allBranches();
+
+
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    super.onPostExecute(aVoid);
+
+                    if (BranchesCodeSimpleList == null) {
+                        BranchesCodeSimpleList = new ArrayList<>();
+                    }
+                    BranchesCodeSimpleList.clear();
+                    BranchesCodeSimpleList.addAll(getALLBranchesCode(BranchesSimpleList));
+                    // branchArrayAdapter.notifyDataSetChanged();
+                    BranchNumSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, BranchesCodeSimpleList));
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage());
+                    //    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+
+                }
+
+
+            }
+        }.execute();
     }
 
 }

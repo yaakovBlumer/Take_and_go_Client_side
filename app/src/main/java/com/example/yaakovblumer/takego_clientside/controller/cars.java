@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
 
@@ -39,6 +41,7 @@ public class cars extends Fragment {
     ListView ListOfCars=null;
     ArrayAdapter<Car> carArray_Adapter=null;
     static ArrayList<Car> car_ArrayList=new ArrayList<>();;
+    Car selectedCarC=null;
 
     public interface OnFragmentInteractionListener {
 
@@ -67,46 +70,34 @@ public class cars extends Fragment {
             ListOfCars = (ListView) view.findViewById( R.id.ListOfCarsView );
             CreateCar_Adapter();
 
+     ////////////////////////
+     ListOfCars.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+         @Override
+         public void onItemSelected(AdapterView<?> carArrayAdapter, View view, int position, long l) {
+             selectedCarC=(Car) ListOfCars.getItemAtPosition(position);
+         }
+         @Override
+         public void onNothingSelected(AdapterView<?> adapterView) {
+             // your stuff
+         }
+     });
 
 
 
-        new AsyncTask<Void, Void, Void>() {
+     ListOfCars.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         @Override
+         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+             selectedCarC=(Car) ListOfCars.getItemAtPosition(i);
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                if(car_ArrayList==null)
-                    car_ArrayList =new ArrayList<>();
-                car_ArrayList.clear();
-                car_ArrayList=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+             String s = ((Car) ListOfCars.getItemAtPosition(i)).getLicenseNumber();
 
-                return null;
+             Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+             // adapter.dismiss(); // If you want to close the adapter
+         }
+     });
 
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                try {
-                    super.onPostExecute(aVoid);
-                    // textView4.setText(temp);
-                    if(car_ArrayList!=null) {
-                        carArray_Adapter.clear();
-                        carArray_Adapter.addAll(car_ArrayList);
-                        carArray_Adapter.notifyDataSetChanged();
-                        ListOfCars.setAdapter(carArray_Adapter);
-                    }
-                    if(car_ArrayList==null)
-                        car_ArrayList=new ArrayList<>();
-
-
-                } catch (Exception e) {
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
-                   // Toast.makeText( , e.getMessage(), Toast.LENGTH_SHORT ).show();
-                }
-
-            }
-
-        }.execute();
+     updateCarList();
 
 
         return view;
@@ -189,6 +180,52 @@ public class cars extends Fragment {
                 return convertView;
             }
         };
+    }
+
+
+
+  public void updateCarList() {
+        /////////////////////////
+
+
+        new AsyncTask<Void, Void, Void>() {
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                if (car_ArrayList == null)
+                    car_ArrayList = new ArrayList<>();
+                car_ArrayList.clear();
+                car_ArrayList = FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable();
+
+                return null;
+
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    super.onPostExecute(aVoid);
+                    // textView4.setText(temp);
+                    if (car_ArrayList != null) {
+                        carArray_Adapter.clear();
+                        carArray_Adapter.addAll(car_ArrayList);
+                        carArray_Adapter.notifyDataSetChanged();
+                        ListOfCars.setAdapter(carArray_Adapter);
+                    }
+                    if (car_ArrayList == null)
+                        car_ArrayList = new ArrayList<>();
+
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage());
+                    // Toast.makeText( , e.getMessage(), Toast.LENGTH_SHORT ).show();
+                }
+
+            }
+
+        }.execute();
+
     }
 
 

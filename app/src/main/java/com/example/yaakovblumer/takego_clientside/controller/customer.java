@@ -9,29 +9,44 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
+import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
+import com.example.yaakovblumer.takego_clientside.model.entities.Branch;
 import com.example.yaakovblumer.takego_clientside.model.entities.Car;
 import com.example.yaakovblumer.takego_clientside.model.entities.CarModel;
 
 
 import com.example.yaakovblumer.takego_clientside.R;
+import com.example.yaakovblumer.takego_clientside.model.entities.Order;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 import java.util.ArrayList;
 
 public class customer extends Fragment {
 
-    TextView textView8, textView10, textView12, textView14, textView16, textView18, textView20, textView22, textView24;
+    TextView customerNum,modeOfOrder, carNumber, rentStartDate, rentEndDate, kilometresAtStart, kilometresAtEnd,
+     isInsertDelek, howMuchDelekInsert, howMuchNeedPay, orderNum;
+    Spinner OrdersNumSpinner;
 
 
+    MYSharedPreferences mySharedPreferences=new MYSharedPreferences();
+String ourIdCustomer=null;
     static String temp=new String("");
     ArrayAdapter<Car> carArrayAdapter;
     ArrayAdapter<CarModel> carModelArrayAdapter;
+    static ArrayList<Order> orderArrayList=new ArrayList<>();
+    static ArrayList<String> orderNumSimpleList = new ArrayList<String>();
+    String selectedOrder=null;
+
+
     static ArrayList<Car> carArrayList=new ArrayList<>();
     static ArrayList<CarModel> carModelArrayList=new ArrayList<>();
     Car car=null;
@@ -60,57 +75,67 @@ public class customer extends Fragment {
         // Inflate the layout for this fragment
 
         View view=inflater.inflate(R.layout.fragment_customer, container, false);
-/*
-        textView8=(TextView)view.findViewById(R.id.textView8);
-        textView10=(TextView)view.findViewById(R.id.textView10);
-        textView12=(TextView)view.findViewById(R.id.textView12);
-        textView14=(TextView)view.findViewById(R.id.textView14);
-        textView16=(TextView)view.findViewById(R.id.textView16);
-        textView18=(TextView)view.findViewById(R.id.textView18);
-        textView20=(TextView)view.findViewById(R.id.textView20);
-        textView22=(TextView)view.findViewById(R.id.textView22);
-        textView24=(TextView)view.findViewById(R.id.textView24); */
+try {
+    ourIdCustomer = mySharedPreferences.idInSharedPreferencesNow(getContext());
+}
+catch (Exception e){}
 
-        new AsyncTask<Void, Void, Void>() {
 
+
+        customerNum = ((TextView) view.findViewById(R.id.customerNumTextView));
+        modeOfOrder = ((TextView) view.findViewById(R.id.modeOfOrderTextView));
+
+        carNumber = ((TextView) view.findViewById(R.id.carNumberTextView));
+
+        rentStartDate = ((TextView) view.findViewById(R.id.rentStartDateTextView));
+
+        rentEndDate = ((TextView) view.findViewById(R.id.rentEndDateTextView));
+
+        kilometresAtStart = ((TextView) view.findViewById(R.id.kilometresAtStartTextView));
+
+        kilometresAtEnd = ((TextView) view.findViewById(R.id.kilometresAtEndTextView));
+
+        isInsertDelek = ((TextView) view.findViewById(R.id.isInsertDelekTextView));
+        howMuchDelekInsert = ((TextView) view.findViewById(R.id.howMuchDelekInsertTextView));
+
+        howMuchNeedPay = ((TextView) view.findViewById(R.id.howMuchNeedPayTextView));
+
+        orderNum = ((TextView) view.findViewById(R.id.orderNumTextView));
+
+
+
+
+        OrdersNumSpinner = (Spinner) view.findViewById(R.id.ordersSpinner);
+        updateOrdersSpinner();
+        ////////////////////////
+        OrdersNumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            protected Void doInBackground(Void... params) {
-
-                carArrayList.addAll(FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allCarAvailable());
-               // carModel= FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCarModel(car.getModelCode());
-
-                return null;
+            public void onItemSelected(AdapterView<?> carArrayAdapter, View view, int position, long l) {
+                selectedOrder=(String) OrdersNumSpinner.getItemAtPosition(position);
+                updateAllOurTextView(selectedOrder);
             }
-
             @Override
-            protected void onPostExecute(Void aVoid) {
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // your stuff
+            }
+        });
 
-                try
-                {
-                    super.onPostExecute(aVoid);
-                    //everything is good.
-                }
-                catch(Exception ex)
-                {
-                 //   Toast.makeText(LogIn.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.w(ConstantsAndEnums.Log.APP_LOG, ex.getMessage());
-                }
-                }
 
-        }.execute();
 
-/*
-        if(carModel!=null) {
-    textView8.setText(carModel.getModelName());
-    textView10.setText(carModel.getCompanyName());
-    textView12.setText(carModel.getEngineVolume());
-    textView14.setText(carModel.getGearbox().toString());
-    textView16.setText(carModel.getNumOfSeats());
-    textView18.setText(carModel.getCarKind().toString());
-    textView20.setText(car.getProductionDate());
-    textView22.setText(car.getMileage());
-    textView24.setText(car.getLicenseNumber());
-}  */
+        OrdersNumSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                selectedOrder=(String) OrdersNumSpinner.getItemAtPosition(i).toString();
+
+                String s = ((String) OrdersNumSpinner.getItemAtPosition(i));
+                updateAllOurTextView(selectedOrder);
+
+                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+                // adapter.dismiss(); // If you want to close the adapter
+            }
+        });
+        ////////////////////////////////////
 
 
         return view;
@@ -162,5 +187,100 @@ public class customer extends Fragment {
 */
 
 
+    public void updateOrdersSpinner() {
+        /////////////////////////
 
-}
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                orderArrayList=new ArrayList<>();
+                orderArrayList.clear();
+
+                orderArrayList=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).allOrdersOpen();
+
+
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                try {
+                    super.onPostExecute(aVoid);
+
+                    if (orderArrayList == null) {
+                        orderArrayList = new ArrayList<>();
+                    }
+                    orderNumSimpleList=new ArrayList<>();
+                    orderNumSimpleList.clear();
+                    orderNumSimpleList=getALLThisCustomerOrders(orderArrayList);
+                    // branchArrayAdapter.notifyDataSetChanged();
+                    OrdersNumSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, orderNumSimpleList));
+
+                } catch (Exception e) {
+                    Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage());
+                    //    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+
+                }
+
+
+            }
+        }.execute();
+    }
+
+
+    public ArrayList<String> getALLThisCustomerOrders(ArrayList<Order> allOrders )
+    {
+
+        ArrayList<String> temp = new ArrayList<>();
+        for (Order item : allOrders)
+        {
+            if (item.getCustomerNum().equals(ourIdCustomer))
+                temp.add(item.getOrderNum());
+        }
+
+        return temp;
+    }
+
+    public Order getOrderByOrderNum(String orderNum )
+    {
+
+        Order temp = null;
+        for (Order item : orderArrayList)
+        {
+            if (item.getOrderNum().equals(ourIdCustomer))
+                return item;
+        }
+
+        return temp;
+    }
+
+    public void updateAllOurTextView(String orderNum)
+
+    {
+        customerNum.setText(getOrderByOrderNum(orderNum).getCustomerNum());
+        modeOfOrder.setText(getOrderByOrderNum(orderNum).getModeOfOrder().toString());
+
+        carNumber.setText(getOrderByOrderNum(orderNum).getCarNumber());
+
+        rentStartDate.setText(getOrderByOrderNum(orderNum).getRentStartDate());
+
+        rentEndDate.setText(getOrderByOrderNum(orderNum).getRentEndDate());
+
+        kilometresAtStart.setText(getOrderByOrderNum(orderNum).getKilometresAtStart());
+
+        kilometresAtEnd.setText(getOrderByOrderNum(orderNum).getKilometresAtEnd());
+
+        isInsertDelek.setText(( Boolean.toString(getOrderByOrderNum(orderNum).getIsInsertDelek())));
+        howMuchDelekInsert.setText(getOrderByOrderNum(orderNum).getHowMuchDelekInsert());
+
+        howMuchNeedPay.setText(getOrderByOrderNum(orderNum).getHowMuchNeedPay());
+
+        this.orderNum.setText(getOrderByOrderNum(orderNum).getOrderNum());
+
+    }
+
+
+    }

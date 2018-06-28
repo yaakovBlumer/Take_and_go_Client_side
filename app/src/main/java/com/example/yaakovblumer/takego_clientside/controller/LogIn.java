@@ -41,8 +41,8 @@ public class LogIn extends AppCompatActivity {
 
     MYSharedPreferences mySharedPreferences;
     Customer customer;
-    String ourId = "";
-    String ourPass = "";
+    static String ourId = "";
+    static String ourPass = "";
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int ID_LENGTH = 9;
     Intent intent_register = new Intent();

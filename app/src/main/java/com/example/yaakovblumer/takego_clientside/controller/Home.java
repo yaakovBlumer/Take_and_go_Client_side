@@ -25,11 +25,17 @@ import android.widget.TextView;
 
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
+import com.example.yaakovblumer.takego_clientside.model.backend.MYSharedPreferences;
 import com.example.yaakovblumer.takego_clientside.model.entities.Car;
+import com.example.yaakovblumer.takego_clientside.model.entities.Customer;
 import com.example.yaakovblumer.takego_clientside.model.entities.Order;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ourId;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +44,13 @@ public class Home extends AppCompatActivity
     customer Customer = null;
     Branches_sec branches_Sec = null;
     about About = null;
+    String dayOfMonth=new String();
+    String Month=new String();
+    SimpleDateFormat sdf =null;
+    String currentDate=null;
+    Customer customer=null;
+    MYSharedPreferences mySharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,35 +263,44 @@ public class Home extends AppCompatActivity
     //cars fragment on click
     public void orderCarOnClickC(View view)
     {
-        new AsyncTask<Void, Void, Long>() {
+        if(getCarsFragment().selectedCarC!=null) {
+
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            currentDate = sdf.format(new Date());
+            //    dayOfMonth=returnTwoDigitNo(sdf.DayOfMonth);
+            //   Month=returnTwoDigitNo(month+1);
+            new AsyncTask<Void, Void, Long>() {
+
+                Order order = new Order(
+                        ourId,
+                        ConstantsAndEnums.orderMode.OPEN,
+                        getCarsFragment().selectedCarC.getLicenseNumber(),
+                        currentDate,
+                        "0000-00-00",
+                        getCarsFragment().selectedCarC.getMileage(),
+                        0,
+                        false,
+                        0,
+                        0,
+                        getCarsFragment().selectedCarC.getLicenseNumber());
+
+                @Override
+                protected void onPostExecute(Long idResult) {
+                    super.onPostExecute(idResult);
+                    getCarsFragment().updateCarList();
+                    //     if (idResult > 0)
+                    //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                protected Long doInBackground(Void... params) {
+                    FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).updateBusyCar(true, order.getCarNumber());
+                    return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
 
 
-          /*  Order order=new Order(
-                    "468711",
-                    ConstantsAndEnums.orderMode.OPEN,
-                    getCarsFragment().ListOfCars.getSelectedItem().toString(),
-                    "22/06/93",
-                    "00/00/00",
-                    1,
-                    2,
-                    false,
-                    3,
-                    4,
-                    "45567");*/
-
-            @Override
-            protected void onPostExecute(Long idResult) {
-                super.onPostExecute(idResult);
-                //     if (idResult > 0)
-                //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            protected Long doInBackground(Void... params) {
-                return null;//FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
-
-            }
-        }.execute();
+                }
+            }.execute();
+        }
 
     }
 
@@ -362,36 +384,65 @@ public class Home extends AppCompatActivity
     //branch_sec fragment on click
     public void orderCarOnClickB(View view)
     {
-        new AsyncTask<Void, Void, Long>() {
+        if(getBranches_secFragment().selectedCarB!=null) {
 
 
-           /* Order order=new Order(
-                    "468711",
-                    ConstantsAndEnums.orderMode.OPEN,
-                    getBranches_secFragment().carListView.getSelectedItem().toString(),
-                    "22/06/93",
-                    "00/00/00",
-                    1,
-                    2,
-                    false,
-                    3,
-                    4,
-                    "45567");  */
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            currentDate = sdf.format(new Date());
+            //    dayOfMonth=returnTwoDigitNo(sdf.DayOfMonth);
+            //   Month=returnTwoDigitNo(month+1);
+            new AsyncTask<Void, Void, Long>() {
 
-            @Override
-            protected void onPostExecute(Long idResult) {
-                super.onPostExecute(idResult);
-                //     if (idResult > 0)
-                //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
-            }
+                Order order = new Order(
+                        ourId,
+                        ConstantsAndEnums.orderMode.OPEN,
+                        getBranches_secFragment().selectedCarB.getLicenseNumber(),
+                        currentDate,
+                        "0000-00-00",
+                        getBranches_secFragment().selectedCarB.getMileage(),
+                        0,
+                        false,
+                        0,
+                        0,
+                        getBranches_secFragment().selectedCarB.getLicenseNumber());
 
-            @Override
-            protected Long doInBackground(Void... params) {
-                return null; // FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                @Override
+                protected void onPostExecute(Long idResult) {
+                    super.onPostExecute(idResult);
+                    getBranches_secFragment().updateSpinner();
+                    getBranches_secFragment().carArrayList = new ArrayList<>();
+                    getBranches_secFragment().carArrayAdapter.clear();
+                    getBranches_secFragment().carArrayAdapter.notifyDataSetChanged();
+                    //     if (idResult > 0)
+                    //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
+                }
 
-            }
-        }.execute();
+                @Override
+                protected Long doInBackground(Void... params) {
+                    FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).updateBusyCar(true, order.getCarNumber());
+                    return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
 
+
+                }
+            }.execute();
+
+        }
+    }
+
+    public String returnTwoDigitNo(int number)
+    {
+        String twoDigitNo = "0";
+        int length = String.valueOf(number).length();
+        if(length == 1)
+        {
+            twoDigitNo = twoDigitNo+number;
+        }
+        if(length == 2)
+        {
+            twoDigitNo = Integer.toString(number);
+        }
+
+        return twoDigitNo;
     }
 
 }

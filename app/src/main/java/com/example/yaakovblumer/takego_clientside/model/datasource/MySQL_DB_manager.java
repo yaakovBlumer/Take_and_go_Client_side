@@ -492,8 +492,67 @@ public class MySQL_DB_manager implements DataSource
         return 0;
     }
 
+    @Override
+    public long updateMileageCar(int mileage, String licenseNumber) {
 
 
+        try {
+            String url = WEB_URL + "/update_mileage_car.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarConst.MILEAGE, mileage);
+            contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, licenseNumber);
+
+            String result = PHP_Tools.POST(url, contentValues);
+
+            String temp="INSERTED OK";
+            long id=-1;
+            if(result.equals(temp))
+                id=1;
+
+            if (id > 0)
+                SetUpdate();
+            printLog("update mileage car:\n" + result);
+
+            return id;
+
+        }
+        catch (Exception e)
+        {
+            printLog("updateCar Exception:\n" + e);
+            return -1;
+        }
+    }
+
+    @Override
+    public long updateBusyCar(boolean busy, String licenseNumber) {
+
+
+        try {
+            String url = WEB_URL + "/%E2%80%8F%E2%80%8Fupdate_busy_car.php";
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(ConstantsAndEnums.CarConst.BUSY, busy);
+            contentValues.put(ConstantsAndEnums.CarConst.LICENSE_NUMBER, licenseNumber);
+
+            String result = PHP_Tools.POST(url, contentValues);
+
+            String temp="INSERTED OK";
+            long id=-1;
+            if(result.equals(temp))
+                id=1;
+
+            if (id > 0)
+                SetUpdate();
+            printLog("update busy car:\n" + result);
+
+            return id;
+
+        }
+        catch (Exception e)
+        {
+            printLog("updateCar Exception:\n" + e);
+            return -1;
+        }
+    }
 
 
     @Override

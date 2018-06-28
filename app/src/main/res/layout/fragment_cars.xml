@@ -21,6 +21,8 @@
             android:id="@+id/orderCarButtonC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:onClick="orderCarOnClickC"
             android:text="הזמן מכונית" />
 
         <ListView

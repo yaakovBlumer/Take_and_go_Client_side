@@ -34,6 +34,11 @@ public interface DataSource {
     ArrayList<Order> allOrdersOpen();
     void closeOrder(String orderNum);
     int isClosedOrderInLast10Seconds();
+    long updateMileageCar(int mileage, String licenseNumber);
+    long updateBusyCar(boolean busy, String licenseNumber);
+
+
+
 
 
 

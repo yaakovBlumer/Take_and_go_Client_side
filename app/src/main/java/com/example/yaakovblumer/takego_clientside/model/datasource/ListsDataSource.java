@@ -151,6 +151,16 @@ public class ListsDataSource implements DataSource {
     }
 
     @Override
+    public long updateMileageCar(int mileage, String licenseNumber) {
+        return 0;
+    }
+
+    @Override
+    public long updateBusyCar(boolean busy, String licenseNumber) {
+        return 0;
+    }
+
+    @Override
     public ArrayList<Customer> allCustomers() {
         return this.customers;
     }
