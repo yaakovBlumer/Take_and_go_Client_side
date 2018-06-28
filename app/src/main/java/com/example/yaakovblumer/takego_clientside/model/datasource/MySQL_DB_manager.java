@@ -437,7 +437,7 @@ public class MySQL_DB_manager implements DataSource
 
         try
         {
-            String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetOrders.php");
+            String str = PHP_Tools.GET(WEB_URL + "/%E2%80%8F%E2%80%8FgetOpenOrders.php");
             JSONArray array = new JSONObject(str).getJSONArray("Orders");
             if(array.equals("0 results"))
                 return null;

@@ -316,7 +316,6 @@ catch (Exception e){}
         kilometresAtEnd.setText(Integer.toString(ourOrder.getKilometresAtEnd()));
 
 
-        // isInsertDelek.setText("isInsertDelek: "+( Boolean.toString(ourOrder.getIsInsertDelek())));
         howMuchDelekInsert.setText(Integer.toString(ourOrder.getHowMuchDelekInsert()));
 
         howMuchNeedPay.setText(Integer.toString(ourOrder.getHowMuchNeedPay()));

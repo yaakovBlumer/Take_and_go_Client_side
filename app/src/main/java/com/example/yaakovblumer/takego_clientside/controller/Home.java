@@ -282,6 +282,8 @@ public class Home extends AppCompatActivity
                 try {
                     super.onPostExecute(aVoid);
                     getCustomerFragment().updateOrdersSpinner();
+                    getCarsFragment().updateCarList();
+
 
                     order=getCustomerFragment().ourOrder;
 
@@ -348,6 +350,7 @@ public class Home extends AppCompatActivity
                 protected void onPostExecute(Long idResult) {
                     super.onPostExecute(idResult);
                     getCarsFragment().updateCarList();
+                    getCustomerFragment().updateOrdersSpinner();
                     //     if (idResult > 0)
                     //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
                 }
@@ -469,6 +472,9 @@ public class Home extends AppCompatActivity
                 @Override
                 protected void onPostExecute(Long idResult) {
                     super.onPostExecute(idResult);
+
+                    getCustomerFragment().updateOrdersSpinner();
+                    getCarsFragment().updateCarList();
                     getBranches_secFragment().updateSpinner();
                     getBranches_secFragment().carArrayList = new ArrayList<>();
                     getBranches_secFragment().carArrayAdapter.clear();
