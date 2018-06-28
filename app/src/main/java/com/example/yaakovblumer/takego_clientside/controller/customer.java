@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +30,20 @@ import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.entities.Order;
 import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class customer extends Fragment {
 
-    TextView customerNum,modeOfOrder, carNumber, rentStartDate, rentEndDate, kilometresAtStart, kilometresAtEnd,
-     isInsertDelek, howMuchDelekInsert, howMuchNeedPay, orderNum;
+    EditText customerNum,modeOfOrder, carNumber, rentStartDate, rentEndDate,
+            kilometresAtStart, howMuchNeedPay, orderNum;
+    EditText kilometresAtEnd, howMuchDelekInsert;
+    Switch isInsertDelek;
     Spinner OrdersNumSpinner;
+    boolean isFirtTime=true;
+    SimpleDateFormat sdf =null;
+    String currentDate=null;
 
 
     MYSharedPreferences mySharedPreferences=new MYSharedPreferences();
@@ -50,6 +59,7 @@ String ourIdCustomer=null;
     static ArrayList<Car> carArrayList=new ArrayList<>();
     static ArrayList<CarModel> carModelArrayList=new ArrayList<>();
     Car car=null;
+    Order ourOrder=null;
     CarModel carModel=null;
 
     public interface OnFragmentInteractionListener {
@@ -82,25 +92,47 @@ catch (Exception e){}
 
 
 
-        customerNum = ((TextView) view.findViewById(R.id.customerNumTextView));
-        modeOfOrder = ((TextView) view.findViewById(R.id.modeOfOrderTextView));
+        customerNum = view.findViewById(R.id.customerNumEditText);
+        modeOfOrder = view.findViewById(R.id.modeOfOrderEditText);
 
-        carNumber = ((TextView) view.findViewById(R.id.carNumberTextView));
+        carNumber = view.findViewById(R.id.carNumberEditText);
 
-        rentStartDate = ((TextView) view.findViewById(R.id.rentStartDateTextView));
+        rentStartDate = view.findViewById(R.id.rentStartDateEditText);
 
-        rentEndDate = ((TextView) view.findViewById(R.id.rentEndDateTextView));
+        rentEndDate = view.findViewById(R.id.rentEndDateEditText);
 
-        kilometresAtStart = ((TextView) view.findViewById(R.id.kilometresAtStartTextView));
+        kilometresAtStart = view.findViewById(R.id.kilometresAtStartEditText);
 
-        kilometresAtEnd = ((TextView) view.findViewById(R.id.kilometresAtEndTextView));
+        kilometresAtEnd = view.findViewById(R.id.kilometresAtEndEditText);
 
-        isInsertDelek = ((TextView) view.findViewById(R.id.isInsertDelekTextView));
-        howMuchDelekInsert = ((TextView) view.findViewById(R.id.howMuchDelekInsertTextView));
+        isInsertDelek = ((Switch) view.findViewById(R.id.isInsertDelekSwitch));
 
-        howMuchNeedPay = ((TextView) view.findViewById(R.id.howMuchNeedPayTextView));
+        howMuchDelekInsert = view.findViewById(R.id.howMuchDelekInsertEditText);
 
-        orderNum = ((TextView) view.findViewById(R.id.orderNumTextView));
+        howMuchNeedPay = view.findViewById(R.id.howMuchNeedPayEditText);
+
+        orderNum = view.findViewById(R.id.orderNumEditText);
+
+        isInsertDelek.setOnCheckedChangeListener( new Switch.OnCheckedChangeListener()  {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isInsertDelek.isChecked()==true)
+                {
+                    howMuchDelekInsert.setEnabled(true);
+                    howMuchDelekInsert.setText("0");
+
+                }
+
+                else {
+                    howMuchDelekInsert.setEnabled(false);
+                    howMuchDelekInsert.setText("0");
+                }
+
+            }
+        });
+
+
 
 
 
@@ -111,8 +143,11 @@ catch (Exception e){}
         OrdersNumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> carArrayAdapter, View view, int position, long l) {
-                selectedOrder=(String) OrdersNumSpinner.getItemAtPosition(position);
-                updateAllOurTextView(selectedOrder);
+                if(!isFirtTime) {
+                    selectedOrder = (String ) OrdersNumSpinner.getItemAtPosition(position);
+                    updateAllOurTextView(selectedOrder);
+                }
+                        isFirtTime=false;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -121,7 +156,7 @@ catch (Exception e){}
         });
 
 
-
+/*
         OrdersNumSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -135,6 +170,7 @@ catch (Exception e){}
                 // adapter.dismiss(); // If you want to close the adapter
             }
         });
+        */
         ////////////////////////////////////
 
 
@@ -250,7 +286,7 @@ catch (Exception e){}
         Order temp = null;
         for (Order item : orderArrayList)
         {
-            if (item.getOrderNum().equals(ourIdCustomer))
+            if (item.getOrderNum().equals(orderNum))
                 return item;
         }
 
@@ -260,25 +296,32 @@ catch (Exception e){}
     public void updateAllOurTextView(String orderNum)
 
     {
-        customerNum.setText(getOrderByOrderNum(orderNum).getCustomerNum());
-        modeOfOrder.setText(getOrderByOrderNum(orderNum).getModeOfOrder().toString());
 
-        carNumber.setText(getOrderByOrderNum(orderNum).getCarNumber());
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        currentDate = sdf.format(new Date());
 
-        rentStartDate.setText(getOrderByOrderNum(orderNum).getRentStartDate());
+        ourOrder=getOrderByOrderNum(orderNum);
 
-        rentEndDate.setText(getOrderByOrderNum(orderNum).getRentEndDate());
+        customerNum.setText(ourOrder.getCustomerNum());
+        modeOfOrder.setText(ourOrder.getModeOfOrder().toString());
 
-        kilometresAtStart.setText(getOrderByOrderNum(orderNum).getKilometresAtStart());
+        carNumber.setText(ourOrder.getCarNumber());
 
-        kilometresAtEnd.setText(getOrderByOrderNum(orderNum).getKilometresAtEnd());
+        rentStartDate.setText(ourOrder.getRentStartDate());
 
-        isInsertDelek.setText(( Boolean.toString(getOrderByOrderNum(orderNum).getIsInsertDelek())));
-        howMuchDelekInsert.setText(getOrderByOrderNum(orderNum).getHowMuchDelekInsert());
+        rentEndDate.setText(currentDate);
 
-        howMuchNeedPay.setText(getOrderByOrderNum(orderNum).getHowMuchNeedPay());
+        kilometresAtStart.setText(Integer.toString(ourOrder.getKilometresAtStart()));
 
-        this.orderNum.setText(getOrderByOrderNum(orderNum).getOrderNum());
+        kilometresAtEnd.setText(Integer.toString(ourOrder.getKilometresAtEnd()));
+
+
+        // isInsertDelek.setText("isInsertDelek: "+( Boolean.toString(ourOrder.getIsInsertDelek())));
+        howMuchDelekInsert.setText(Integer.toString(ourOrder.getHowMuchDelekInsert()));
+
+        howMuchNeedPay.setText(Integer.toString(ourOrder.getHowMuchNeedPay()));
+
+        this.orderNum.setText(ourOrder.getOrderNum());
 
     }
 

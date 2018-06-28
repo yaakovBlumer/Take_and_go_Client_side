@@ -32,7 +32,7 @@ public interface DataSource {
     ArrayList<Car> allCarAvailableInRadius(int radius);
     ArrayList<Branch> allBranchesExistsModel(String model);
     ArrayList<Order> allOrdersOpen();
-    void closeOrder(String orderNum);
+    void closeOrder(Order order);
     int isClosedOrderInLast10Seconds();
     long updateMileageCar(int mileage, String licenseNumber);
     long updateBusyCar(boolean busy, String licenseNumber);

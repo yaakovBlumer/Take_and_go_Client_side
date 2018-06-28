@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import java.util.Date;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,7 +34,6 @@ import com.example.yaakovblumer.takego_clientside.model.utils.ConstantsAndEnums;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.example.yaakovblumer.takego_clientside.controller.LogIn.ourId;
 
@@ -49,6 +49,12 @@ public class Home extends AppCompatActivity
     SimpleDateFormat sdf =null;
     String currentDate=null;
     Customer customer=null;
+    Date startDate=null;
+    Date endDate=null;
+    int ourDay;
+    int ourKm;
+    int ourDelek;
+    int toPay;
     MYSharedPreferences mySharedPreferences;
 
 
@@ -232,13 +238,41 @@ public class Home extends AppCompatActivity
     //customer fragment click
     public void closeOrderOnClick(View v)
     {
+        try {
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            currentDate = sdf.format(new Date());
+            startDate = sdf.parse(getCustomerFragment().rentStartDate.getText().toString());
+            endDate = sdf.parse(getCustomerFragment().rentEndDate.getText().toString());
+            ourDay=((endDate.getDay()-startDate.getDay())+1);
+            ourKm=(Integer.parseInt(getCustomerFragment().kilometresAtEnd.getText().toString())-Integer.parseInt(getCustomerFragment().kilometresAtStart.getText().toString()));
+            if(getCustomerFragment().isInsertDelek.isChecked()==true)
+            ourDelek=Integer.parseInt(getCustomerFragment().howMuchDelekInsert.getText().toString());
+            else ourDelek=0;
+
+            getCustomerFragment().ourOrder.setHowMuchDelekInsert(ourDelek);
+            getCustomerFragment().ourOrder.setIsInsertDelek(getCustomerFragment().isInsertDelek.isChecked());
+            getCustomerFragment().ourOrder.setRentEndDate(currentDate);
+           getCustomerFragment().ourOrder.setKilometresAtEnd(Integer.parseInt(getCustomerFragment().kilometresAtEnd.getText().toString()));
+            getCustomerFragment().ourOrder.setModeOfOrder(ConstantsAndEnums.orderMode.CLOSE);
+        }
+        catch (Exception e){}
+
 
         new AsyncTask<Void, Void, Void>() {
+            Car tmpCar;
+            Order order;
 
             @Override
             protected Void doInBackground(Void... params) {
 
-                FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).closeOrder("1243");
+                tmpCar=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).isExistsCar(getCustomerFragment().ourOrder.getCarNumber());
+
+                toPay=howMuchNeedPay(ourDay,tmpCar.getAverageCostPerDay(),ourKm,ourDelek);
+                getCustomerFragment().ourOrder.setHowMuchNeedPay(toPay);
+
+
+                FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).closeOrder(getCustomerFragment().ourOrder);
+
                 return null;
             }
 
@@ -247,6 +281,32 @@ public class Home extends AppCompatActivity
             protected void onPostExecute(Void aVoid) {
                 try {
                     super.onPostExecute(aVoid);
+                    getCustomerFragment().updateOrdersSpinner();
+
+                    order=getCustomerFragment().ourOrder;
+
+                    getCustomerFragment().customerNum.setText(order.getCustomerNum());
+
+                    getCustomerFragment().modeOfOrder.setText(order.getModeOfOrder().toString());
+
+                    getCustomerFragment().carNumber.setText(order.getCarNumber());
+
+                    getCustomerFragment().rentStartDate.setText(order.getRentStartDate());
+
+                    getCustomerFragment().rentEndDate.setText(order.getRentEndDate());
+
+                    getCustomerFragment().kilometresAtStart.setText(Integer.toString(order.getKilometresAtStart()));
+
+                    getCustomerFragment().kilometresAtEnd.setText(Integer.toString(order.getKilometresAtEnd()));
+
+
+                    getCustomerFragment(). isInsertDelek.setChecked(order.getIsInsertDelek());
+                    getCustomerFragment().howMuchDelekInsert.setText(Integer.toString(order.getHowMuchDelekInsert()));
+
+                    getCustomerFragment().howMuchNeedPay.setText(Integer.toString(order.getHowMuchNeedPay()));
+
+                    getCustomerFragment().orderNum.setText(order.getOrderNum());
+
 
                 } catch (Exception e) {
                     Log.w(ConstantsAndEnums.Log.APP_LOG, e.getMessage() );
@@ -443,6 +503,16 @@ public class Home extends AppCompatActivity
         }
 
         return twoDigitNo;
+    }
+
+    public int howMuchNeedPay(int dayOfRent,int costPerDay, int km,int giveDelek)
+    {
+        int needToPay=0;
+        needToPay=(int)((dayOfRent*costPerDay) + (km*0.4));
+        needToPay=(int)(needToPay -(giveDelek*6.30));
+        if (needToPay<0)
+            needToPay=0;
+        return needToPay;
     }
 
 }

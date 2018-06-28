@@ -19,13 +19,14 @@
         <Spinner
             android:id="@+id/ordersSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="36dp" />
 
-        <TextView
-            android:id="@+id/TitleTextView"
+        <EditText
+            android:id="@+id/TitleEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="פרטי הזמנה:"
+            android:enabled="false"
+            android:hint="פרטי הזמנה:"
             tools:elegantTextHeight="false" />
 
         <TextView
@@ -33,121 +34,209 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/customerNumTextView"
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/customerNumEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="תעודת זהות של הלקוח" />
+            android:enabled="false"
+            android:hint="תעודת זהות של הלקוח" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/modeOfOrderTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/modeOfOrderEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="מצב הזמנה" />
+            android:enabled="false"
+            android:hint="מצב הזמנה" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/carNumberTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/carNumberEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="מספר רכב" />
+            android:enabled="false"
+            android:hint="מספר רכב" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/rentStartDateTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/rentStartDateEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="תאריך תחילת שכירות" />
+            android:enabled="false"
+            android:hint="תאריך תחילת שכירות" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/rentEndDateTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/rentEndDateEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="תאריך סוף שכירות" />
+            android:enabled="false"
+            android:hint="תאריך סוף שכירות" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/kilometresAtStartTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/kilometresAtStartEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="קילומטראז' בתחילת שכירות" />
+            android:enabled="false"
+            android:hint="קילומטראז' בתחילת שכירות" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/kilometresAtEndTextView"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="קילומטראז' בסוף שכירות" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/kilometresAtEndEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="קילומטראז' בסוף שכירות"
+                android:inputType="number|numberDecimal"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/isInsertDelekTextView"
+        <Switch
+            android:id="@+id/isInsertDelekSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="האם הרכב תודלק" />
+            android:checked="false"
+            android:ems="10"
+            android:gravity="end"
+            android:hint="אנא סמן האם הרכב תודלק"
+            android:inputType="none"
+            android:textOff="לא תודלק"
+            android:textOn="תודלק"
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/space9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/howMuchDelekInsertTextView"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="בכמה דלק תודלק הרכב" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/howMuchDelekInsertEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="בכמה דלק תודלק"
+                android:inputType="number|numberDecimal"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/howMuchNeedPayTextView"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/howMuchNeedPayEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="סכום לתשלום" />
+            android:enabled="false"
+            android:hint="סכום לתשלום" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/space11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/orderNumTextView"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="מספר הזמנה" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/orderNumEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="מספר הזמנה" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/space12"

@@ -460,16 +460,15 @@ public class MySQL_DB_manager implements DataSource
     }
 
     @Override
-    public void closeOrder(String orderNum) {
+    public void closeOrder(Order order) {
 
         try
         {
             String url = WEB_URL + "/close_order.php";
 
-            ContentValues contentValues=new ContentValues();
-            contentValues.put(ConstantsAndEnums.OrderConst.ORDER_NUM, orderNum);
 
-            String result =  PHP_Tools.POST(url, contentValues);
+
+            String result =  PHP_Tools.POST(url, ConstantsAndEnums.OrderToContentValues(order));
 
             String temp="UPDATED OK";
             long id=-1;

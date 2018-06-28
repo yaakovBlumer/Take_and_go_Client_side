@@ -141,7 +141,7 @@ public class ListsDataSource implements DataSource {
     }
 
     @Override
-    public void closeOrder(String orderNum) {
+    public void closeOrder(Order order) {
 
     }
 
