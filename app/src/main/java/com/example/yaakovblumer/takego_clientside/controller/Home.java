@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yaakovblumer.takego_clientside.R;
 import com.example.yaakovblumer.takego_clientside.model.backend.FactoryMethod;
@@ -351,14 +352,19 @@ public class Home extends AppCompatActivity
                     super.onPostExecute(idResult);
                     getCarsFragment().updateCarList();
                     getCustomerFragment().updateOrdersSpinner();
-                    //     if (idResult > 0)
-                    //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
+                         if (idResult > 0)
+                             Toast.makeText(getBaseContext(), "insert order", Toast.LENGTH_LONG).show();
+
+                   else  Toast.makeText(getBaseContext(), "insert order error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 protected Long doInBackground(Void... params) {
-                    FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).updateBusyCar(true, order.getCarNumber());
-                    return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                    long result;
+                    result=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                    if(result>0)
+                        FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).updateBusyCar(true, order.getCarNumber());
+                    return result;
 
 
                 }
@@ -472,23 +478,28 @@ public class Home extends AppCompatActivity
                 @Override
                 protected void onPostExecute(Long idResult) {
                     super.onPostExecute(idResult);
+                    if (idResult > 0) {
+                        Toast.makeText(getBaseContext(), "insert order", Toast.LENGTH_LONG).show();
+                        getCustomerFragment().updateOrdersSpinner();
+                        getCarsFragment().updateCarList();
+                        getBranches_secFragment().updateSpinner();
+                        getBranches_secFragment().carArrayList = new ArrayList<>();
+                        getBranches_secFragment().carArrayAdapter.clear();
+                        getBranches_secFragment().carArrayAdapter.notifyDataSetChanged();
 
-                    getCustomerFragment().updateOrdersSpinner();
-                    getCarsFragment().updateCarList();
-                    getBranches_secFragment().updateSpinner();
-                    getBranches_secFragment().carArrayList = new ArrayList<>();
-                    getBranches_secFragment().carArrayAdapter.clear();
-                    getBranches_secFragment().carArrayAdapter.notifyDataSetChanged();
+                    }
+                    else  Toast.makeText(getBaseContext(), "insert order error", Toast.LENGTH_LONG).show();
                     //     if (idResult > 0)
                     //  Toast.makeText(getBaseContext(), "insert Branch Number: " + BranchNum.getText().toString(), Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 protected Long doInBackground(Void... params) {
+                    long result;
+                     result=FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
+                     if(result>0)
                     FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).updateBusyCar(true, order.getCarNumber());
-                    return FactoryMethod.getDataSource(FactoryMethod.Type.MySQL).addOrder(order);
-
-
+                     return result;
                 }
             }.execute();
 
